@@ -1,0 +1,242 @@
+#menu
+{
+	position:		absolute; 
+	left:			0px; 
+	top:			0px;
+	z-index:		1;
+}
+
+#menutable
+{
+	background: 	#EEEEEE;
+	border:			solid 1px black;
+}
+
+.dragdroptable
+{
+	color:			red;
+	border:			solid 1px red;
+}
+
+#menutable input:hover, 
+:hover#save, :hover#undo, :hover#redo, :hover#update, :hover#delete, :hover#usewysiwyg,
+{
+	background-color:	Highlight;
+}
+
+#save			{ background-image: url(save.gif);}
+#undo			{ background-image: url(undo.gif);}
+#redo			{ background-image: url(redo.gif);}
+#delete			{ background-image: url(delete.gif);}
+#update			{ background-image: url(update.gif);}
+#showcalendar	{ background-image: url(showcalendar.gif);}
+
+#selected, .selected
+{
+	font-weight:	bold;
+	border:			solid 2px darkred;
+	color:			darkred;
+}
+
+#search
+{
+	width:			70px;
+}
+
+#errors
+{
+	color:			red;
+}
+
+.qc
+{
+	color:			red;
+	font-weight:	bold;
+}
+
+.menuitem
+{
+	border:			solid 1px black;
+}
+
+.tool, .toolselected
+{
+	padding:				1px 1px 1px 1px;
+	width:					20px;
+	margin:					1px;
+	background-position:	center;
+	background-repeat:		no-repeat;
+	background-color:		#EEEEEE;
+}
+
+.tool
+{
+	border-right: black 1px solid;
+	border-top: white 1px solid;
+	border-left: white 1px solid;
+	border-bottom: black 1px solid;
+}
+
+.toolselected
+{
+	border-right: white 1px solid;
+	border-top: black 1px solid;
+	border-left: black 1px solid;
+	border-bottom: white 1px solid;
+}
+
+.col, .colsorted, .colsorteddescending
+{
+	border:			none;
+	background:		none;
+	font-weight:	bold;
+	font-family:	Arial;
+}
+
+.colsorted
+{
+	text-decoration:underline;
+}
+
+.colsorteddescending
+{
+	text-decoration:overline;
+}
+
+.date
+{
+	border:			solid 1px black;
+	margin:			0px 0px 0px 0px;
+	padding:		0px 0px 0px 0px;
+}
+
+.date
+{
+	text-align:		right;
+	width:          30px;
+}
+
+.controlexp
+{
+	width:          20px;
+}
+
+.rowdropabove, .rowdropbelow	
+{
+	background-color:	White;
+	background-image: 	url(red.jpg);
+	background-repeat:	repeat-x;
+}
+
+.rownormal		{background-color:		White;}
+.rowtotal		{background-color:		White;}
+.rowdeleted		{background-color:		Gray;}
+.rownew			{background-color:		Lime;}
+.rowchanged		{background-color:		Yellow;}
+.rowblank		{background-color:		Silver;}
+.rowfound		{background-color:		#FFC0C0;}
+.rowdropabove	{background-position: 	top;}
+.rowdropbelow	{background-position: 	bottom;}
+.rowdragsource	{background-color:		white;}
+.rowdragsource	{color: 				pink;}
+
+
+.tabbutton, .linkbutton
+{
+	border: 		none;
+	background:		none;
+}
+
+.linkbutton
+{ 
+	text-decoration:	underline;
+	color:				blue; 
+}
+
+
+.tabcell
+{
+	border:	solid 2px #BBBBBB;
+	border-bottom:	solid 2px black;
+}
+
+.tabgap
+{
+	border-bottom:	solid 2px black;
+}
+
+.tabcell, .tabtop, .tabgap
+{
+	background:		#F8F8F8;
+	height:			8px;
+	width:			8px;
+}
+
+.tabcell
+{
+	background:		#DDDDDD;
+}
+
+.tabcellactive
+{
+	border-top:	    solid 2px black;
+	border-left:	solid 2px black;
+	border-right:	solid 2px black;
+	border-bottom:	none;
+}
+
+.tabcellactive .tabbutton, .optionspecial
+{
+	font-weight:	bold;
+}
+
+td
+{
+	vertical-align:	top;
+}
+
+table
+{
+	border-collapse:collapse;
+	margin:			0px 0px 0px 0px;
+	padding:		0px 0px 0px 0px;
+}
+
+textarea
+{
+	font-family:	Arial;
+}
+
+input
+{
+	margin:			0px 0px 0px 0px;
+	padding:		0px 0px 0px 0px;
+	font-size:		10pt;
+}
+
+body
+{
+	margin:		0px 0px 0px 0px;
+	background:	url(logogrey.gif);
+}
+
+label
+{
+	font-weight:	bold;
+	font-family:	Arial;
+}
+
+.link
+{
+	background:	#EEEEEE;
+}
+
+.childtable
+{
+	margin-left:	30px;
+}
+
+.monday, .tuesday, .wednesday, .thursday, .friday
+{
+	background:	#EEEEEE;
+}
