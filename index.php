@@ -22,7 +22,8 @@
 	    <li><a class="link" href="javascript:Submit('events','type','Weekend Trips')">Edit Weekend Trips</a></li>
 	    <li><a class="link" href="javascript:Submit('events','type','Day Trips')">Edit Day Trips</a></li>
 	    <li><a class="link" href="javascript:Submit('events','type','Social Event')">Edit Social Events</a></li>
-		<?
+        <li><a class="link" href="../scripts/processNewsletterEvents.php" target="_blank">Publish trips and social events to web site</a></li>
+		<?php
 		$rows = mysql_query("select 'All' section UNION select distinct section from ctcweb9_newsletter.notices",$con);
 
 		while ($row = mysql_fetch_array($rows))
