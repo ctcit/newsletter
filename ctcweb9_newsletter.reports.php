@@ -44,14 +44,14 @@
 					"  ORDER BY jos_categories.name, jos_content.id ".
 		
 					" UNION ". */
-					" SELECT jos_tripreport.id as `id`, ".
-					"     concat(jos_tripreport.year, ' ', jos_tripreport.title, ".
-					"            ' (', jos_tripreport.id, ')') as `name`, ".
-					"     jos_tripreport.title as `title`, ".
-					"     jos_tripreport.date_display as `date`, ".
-					"     jos_tripreport.year = '$year' AND ".
-					"	  NOT (jos_tripreport.id IN (SELECT reportid FROM $table)) `common` ".
-					" from jos_tripreport";
+					" SELECT tripreport.id as `id`, ".
+					"     concat(tripreport.year, ' ', tripreport.title, ".
+					"            ' (', tripreport.id, ')') as `name`, ".
+					"     tripreport.title as `title`, ".
+					"     tripreport.date_display as `date`, ".
+					"     tripreport.year = '$year' AND ".
+					"	  NOT (tripreport.id IN (SELECT reportid FROM $table)) `common` ".
+					" from ctcweb9_tripreports.tripreport";
 		
 		// TODO reimplement Aunty Iceaxe report inclusion
 		// TODO disambiguate Aunty Iceaxe reports from Trip Reports (?)
@@ -133,12 +133,12 @@
 
 		function MakeReportLink(data)
 		{
-			if (root.cols.reportid.source.Data()[data.reportid] == null)
+			if (root.cols.reportid.source.Data()[data.reportid] === null)
 				return '';
 
-			return "<a href='" +         
-		           "http://localhost/ctc/index.php?option=com_tripreport&task=view&id=" +
-		           data.reportid + "'>Go to report</a>";
+			return "<a href=\"" +
+                    "../tripreports/index.html#/tripreports/" +
+		           data.reportid + "/\">Go to report</a>";
 		}                            
 
 		function MakeTitleObj(data)

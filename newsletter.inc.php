@@ -497,21 +497,19 @@ function CurrentDates($con)
 
 // Set flag that this is a parent file
 define( '_VALID_MOS', 1 );
-
-require_once( '../globals.php' );
-require_once( '../configuration.php' );
-require_once( '../includes/joomla.php' );
-require_once( '../includes/sef.php' );
-
-$con    = mysql_connect("localhost",   $mosConfig_user, $mosConfig_password);
+define('_JEXEC', 1);
+define('JPATH_BASE', dirname(__DIR__));// Assume newsletter at top level in website
+require_once( JPATH_BASE.'/globals.php' );
+require_once( JPATH_BASE.'/configuration.php' );
+require_once ( JPATH_BASE.'/includes/defines.php' );
+require_once ( JPATH_BASE.'/includes/framework.php' );
+$app = JFactory::getApplication('site');
+$user = JFactory::getUser();
+$config = new JConfig();
+$con    = mysql_connect("localhost",  $config->user, $config->password);
 if (!$con)
     die('mysql_connect failed');
-
-// mainframe is an API workhorse, lots of 'core' interaction routines
-$mainframe = new mosMainFrame( $database, '', '.' );
-$mainframe->initSession();
-$userobj	= $mainframe->getUser();
-$username	= $userobj->username;
+$username	= $user->username;
 
 $processor = new PostProcessor($con,$username);
 $processor->ProcessPost($_POST);
