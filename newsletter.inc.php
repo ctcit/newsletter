@@ -499,7 +499,7 @@ function CurrentDates($con)
 define( '_VALID_MOS', 1 );
 define('_JEXEC', 1);
 define('JPATH_BASE', dirname(__DIR__));// Assume newsletter at top level in website
-require_once( JPATH_BASE.'/globals.php' );
+//require_once( JPATH_BASE.'/globals.php' );
 require_once( JPATH_BASE.'/configuration.php' );
 require_once ( JPATH_BASE.'/includes/defines.php' );
 require_once ( JPATH_BASE.'/includes/framework.php' );
