@@ -1,4 +1,7 @@
 <?php
+
+require_once('config.php');
+
 /// Remove every thing that is RTF markup text, leaving only the readable text
 function RtfStrip($s)
 {
@@ -154,7 +157,7 @@ function JsonFromString($val)
     return "'$val'";
 }
 
-// Converts a row from mysql_fetch_array to a javascript object
+// Converts a row from mysqli_fetch_array to a javascript object
 function JsonFromRow($queryrow)
 {
     $js  = "";
@@ -173,13 +176,13 @@ function JsonFromQuery($con,$query,$echoquery = true, $array = false)
 	if ($echoquery)
 		echo "/*$query*/\n";
 
-    $queryrows = mysql_query($query,$con);
+    $queryrows = mysqli_query($query,$con);
     $js   = "";
 
     if (!$queryrows)
-        die(mysql_error($con));
+        die(mysqli_error($con));
 
-    while ($queryrow = mysql_fetch_array($queryrows))
+    while ($queryrow = mysqli_fetch_array($queryrows))
 	{
 		if ($array)
 			$js .= "{".JsonFromRow($queryrow)."},\n";
@@ -221,11 +224,11 @@ function ArrayToList($arr)
 function ArrayFromQuery($con,$query)
 {
 	$arr  = array();
-    $queryrows = mysql_query($query,$con);
+    $queryrows = mysqli_query($query,$con);
     if (!$queryrows)
-        die(mysql_error($con).$query);
+        die("No rows<br>" . mysqli_error($con).$query);
 
-    while ($row = mysql_fetch_array($queryrows))
+    while ($row = mysqli_fetch_array($queryrows))
 		$arr[$row[0]] = $row[1];
 	
 	return $arr;
@@ -233,11 +236,11 @@ function ArrayFromQuery($con,$query)
 
 function ValueFromSql($con,$query)
 {
-    $queryrows = mysql_query($query,$con);
+    $queryrows = mysqli_query($query,$con);
 
     if (!$queryrows)
-        return $query.'\r\n'.mysql_error($con);
-    else if ($row = mysql_fetch_array($queryrows))
+        return $query.'\r\n'.mysqli_error($con);
+    else if ($row = mysqli_fetch_array($queryrows))
 		return $row[0];
     else
         return "";
@@ -245,20 +248,20 @@ function ValueFromSql($con,$query)
 
 function SetField($con,$name,$value,$type)
 {
-	mysql_query("INSERT INTO ctcweb9_newsletter.fields(`name`,`value`,`type`) 
+	mysqli_query("INSERT INTO ctcweb9_newsletter.fields(`name`,`value`,`type`) 
 												VALUES('$name','$value','$type')
 				ON DUPLICATE KEY UPDATE `value`='$value'",$con);
 }
 
 function ProcessFields($con)
 {
-    $queryrows = mysql_query("SELECT * FROM ctcweb9_newsletter.`fields`",$con);
+    $queryrows = mysqli_query("SELECT * FROM ctcweb9_newsletter.`fields`",$con);
 	$out = array();
     
     if (!$queryrows)
-        die(mysql_error($con));
+        die(mysqli_error($con));
 
-    while ($row = mysql_fetch_array($queryrows))
+    while ($row = mysqli_fetch_array($queryrows))
     {
         $asql   = FieldExplode($row["sql"],"{","}");
 		
@@ -279,9 +282,9 @@ function ProcessFields($con)
 		$out[strtolower($row["name"])] = array( "value" => $value, "sql" => $sql );
         
 		if ($value != $row["value"] &&
-			!mysql_query("update ctcweb9_newsletter.`fields` 
+			!mysqli_query("update ctcweb9_newsletter.`fields` 
 							set value='".addslashes($value)."' where id = $id"))
-			die(mysql_error($con));
+			die(mysqli_error($con));
     }
 	
 	return $out;
@@ -302,12 +305,12 @@ class PostProcessor
 		// get the information about the current user from the sessions table
 		$this->con 				= $con;
 		$this->username 		= $username;
-                $this->userpositions = ArrayFromQuery($con,
-                    "SELECT role, fullName
-                     FROM ctcweb9_ctc.view_members, ctcweb9_ctc.members_roles, ctcweb9_ctc.roles
-                     WHERE loginName='$username'
-                     AND members_roles.memberId = view_members.memberId
-                     AND members_roles.roleId = roles.id");
+        $this->userpositions = ArrayFromQuery($con,
+            "SELECT role, fullName
+             FROM ctcweb9_ctc.view_members, ctcweb9_ctc.members_roles, ctcweb9_ctc.roles
+             WHERE loginName='$username'
+             AND members_roles.memberId = view_members.memberId
+             AND members_roles.roleId = roles.id");
 		//$this->userpositions	= ArrayFromQuery($con,"select con_position, jos_contact_details.name 
 		//												from jos_contact_details, jos_users
 		//												where jos_users.username = '$this->username'
@@ -394,9 +397,9 @@ class PostProcessor
 	    foreach ($rows as $row)
 	    {
 	        $sql = "$row[action] $row[table] $row[set] $row[where]";
-	        if (!mysql_query($sql,$this->con))
+	        if (!mysqli_query($sql,$this->con))
 			{
-	            $this->errors .= "$sql\n".mysql_error($this->con)."<br/>\n";
+	            $this->errors .= "$sql\n".mysqli_error($this->con)."<br/>\n";
 				continue;
 			}
 
@@ -408,9 +411,9 @@ class PostProcessor
 			$sql = "INSERT INTO $this->historyitem
 					SET `datetime`='".$this->datetime."', `table`='$row[table]', `id`='$id', 
 						`action`='$row[action]', `username`='".$this->username."'";
-	        if (!mysql_query($sql,$this->con))
+	        if (!mysqli_query($sql,$this->con))
 			{
-	            $this->errors .= "$sql\n".mysql_error($this->con)."<br/>\n";
+	            $this->errors .= "$sql\n".mysqli_error($this->con)."<br/>\n";
 				continue;
 			}
 			
@@ -419,8 +422,8 @@ class PostProcessor
 	        foreach ($row["hist"] as $hist)
 	        {
 	             $sql = "INSERT INTO $this->historydetail SET `itemid`='$itemid' $hist";
-	             if (!mysql_query($sql,$this->con))
-	                $this->errors .= "$sql\n".mysql_error($this->con)."<br/>\n";
+	             if (!mysqli_query($sql,$this->con))
+	                $this->errors .= "$sql\n".mysqli_error($this->con)."<br/>\n";
 	        }
 	    }
 	    
@@ -468,15 +471,15 @@ class PostProcessor
 		else
 			$sql = "UPDATE $table SET `size`=$size, `data`='$data', uploaded='$this->datetime' WHERE `name`='$name'";
 
-	    if (!mysql_query($sql,$this->con))
-			return "$name\n".mysql_error($this->con);
+	    if (!mysqli_query($sql,$this->con))
+			return "$name\n".mysqli_error($this->con);
 			
 		$id = ValueFromSql($this->con,"SELECT id FROM $table WHERE `name` = '$name'");
 		$sql = "INSERT INTO $this->historyitem
 					SET `datetime`='$this->datetime', `table`='$table', `id`='$id', 
 						`action`='Uploaded', `username`='$this->username'";
-	    if (!mysql_query($sql,$this->con))
-			return "$name\n".mysql_error($this->con);
+	    if (!mysqli_query($sql,$this->con))
+			return "$name\n".mysqli_error($this->con);
 			
 		return "";
 	}
@@ -485,9 +488,9 @@ class PostProcessor
 // Returns relevant information from the ctcweb9_newsletter.newsletter table
 function CurrentDates($con)
 {
-    $current = mysql_query("SELECT * FROM ctcweb9_newsletter.newsletters WHERE IsCurrent",$con);
+    $current = mysqli_query("SELECT * FROM ctcweb9_newsletter.newsletters WHERE IsCurrent",$con);
 
-    if ($row = mysql_fetch_array($current))
+    if ($row = mysqli_fetch_array($current))
         return array("date"         => $row["date"],
                      "issuedate"    => $row["issueDate"]);
     else
@@ -506,7 +509,7 @@ require_once ( JPATH_BASE.'/includes/framework.php' );
 $app = JFactory::getApplication('site');
 $user = JFactory::getUser();
 $config = new JConfig();
-$con    = mysql_connect("localhost",  $config->user, $config->password);
+$con    = mysqli_connect("localhost",  $config->user, $config->password);
 if (!$con)
     die('mysql_connect failed');
 $username	= $user->username;

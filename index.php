@@ -49,8 +49,8 @@
 		</ul>
 		<h2>Instructions for Trip organisers, Social Convenors and Notice Contributors</h2>
 		<ol>
-		<li>Log in to <a href="http://www.ctc.org.nz">http://www.ctc.org.nz</a> using your user name.</li>
-		<li>Navigate to <a href="http://www.ctc.org.nz/newsletter/index.php">http://www.ctc.org.nz/newsletter/index.php</a> .</li>
+		<li>Log in to <a href="<?php echo BASE_URL; ?>"><?php echo BASE_URL; ?></a> using your user name.</li>
+		<li>Navigate to <a href="<?php echo BASE_URL; ?>/newsletter/index.php"><?php echo BASE_URL; ?>/newsletter/index.php</a> .</li>
 		<li>Click on "Edit Weekend Trips" or whatever is appropriate for you.</li>
 		<li>Scroll down to one of the bottom ten rows (they are grey, and the place new entries are entered)</li>
 		<li>Click one of the <input value="+" type="button" class="tool" /> buttons,

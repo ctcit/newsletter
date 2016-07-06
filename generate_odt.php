@@ -491,7 +491,7 @@ class XmlTemplateEngine {
         }
         else {
             $rows = array();
-            while ($row = mysql_fetch_assoc($forEachQueryResult)) {
+            while ($row = mysqli_fetch_assoc($forEachQueryResult)) {
                 $rows[] = $row;
             }
         }
@@ -566,9 +566,9 @@ class XmlTemplateEngine {
                 else {
                     $sql = $param;
                 }
-                $queryResult = mysql_query($sql);
+                $queryResult = mysqli_query($sql);
                 if (!$queryResult) {
-                    die('Invalid query: ' . mysql_error());
+                    die('Invalid query: ' . mysqli_error());
                 }
             }
 
@@ -758,9 +758,9 @@ class XmlTemplateEngine {
 
 // "main body" is just debugging
 if ($DEBUGGING) {
-    $con = mysql_connect("localhost", 'ctcweb9_ctcadmin', 'murgatr0ad');
+    $con = mysqli_connect("localhost", 'ctcweb9_ctcadmin', 'murgatr0ad');
     $con || die('Could not connect to database');
-    mysql_select_db('ctcweb9_newsletter') || die('Could not open database');
+    mysqli_select_db('ctcweb9_newsletter') || die('Could not open database');
     $filename = "newsletterTemplate.odt";
     $template = file_get_contents($filename);
     $engine = new XmlTemplateEngine();

@@ -117,7 +117,7 @@
 			function MakeIncludePreview(data)
 			{
 				var re  = new RegExp(" ","g");
-				var src = "http://www.ctc.org.nz/newsletter/generate.php?name=" + 
+				var src = "<?php echo BASE_URL; ?>/newsletter/generate.php?name=" + 
 							data.includedocument.replace(re,'%20');
 				
 				if 		(child.source.includedocument.Data()[data.includedocument.toLowerCase()] == null)

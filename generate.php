@@ -290,7 +290,7 @@ class RtfGenerator
         if ($includehtmlbookmark && $row['source'] != '' && $row['id'] != '')
         {
             $inc = explode('"',$this->RtfField( $template, 'includehtmlbookmark' ));
-            $inc[1] = "\"http://www.ctc.org.nz$_SERVER[PHP_SELF]?source=$row[source]&id=$row[id]&col=$col&bookmark=1\"";
+            $inc[1] = '"' . BASE_URL . "/$_SERVER[PHP_SELF]?source=$row[source]&id=$row[id]&col=$col&bookmark=1\"";
             $this->debugtext .= "includehtml=$inc[1]<br/>\n";
             return FieldImplode($inc);
         }
