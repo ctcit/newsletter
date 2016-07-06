@@ -395,7 +395,7 @@ class PostProcessor
 	    foreach ($rows as $row)
 	    {
 	        $sql = "$row[action] $row[table] $row[set] $row[where]";
-	        if ($this->con->query($sql))
+	        if (!$this->con->query($sql))
 			{
 	            $this->errors .= "$sql\n".$this->con->error."<br/>\n";
 				continue;
