@@ -46,10 +46,12 @@ class XmlTemplateEngine {
 
     /**
      * Construct a new xmlTemplateEngine.
+     * The first parameter is a database object (mysqli).
      * The optional parameter is a list of table rows to be used
      * if a foreach command is encountered without an query argument.
      */
-    function __construct($tableRows = null) {
+    function __construct($db, $tableRows = null) {
+        $this->db = $db;
         $this->level = 0;
         $this->reserved = array("foreach", "if", "endif", "endforeach");
         $this->tableRows = $tableRows;
@@ -491,7 +493,7 @@ class XmlTemplateEngine {
         }
         else {
             $rows = array();
-            while ($row = mysql_fetch_assoc($forEachQueryResult)) {
+            while ($row = $this->db->fetch_assoc($forEachQueryResult)) {
                 $rows[] = $row;
             }
         }
@@ -566,9 +568,9 @@ class XmlTemplateEngine {
                 else {
                     $sql = $param;
                 }
-                $queryResult = mysql_query($sql);
+                $queryResult = $this->db->query($sql);
                 if (!$queryResult) {
-                    die('Invalid query: ' . mysql_error());
+                    die('Invalid query: ' . $this->db->error);
                 }
             }
 
@@ -758,12 +760,12 @@ class XmlTemplateEngine {
 
 // "main body" is just debugging
 if ($DEBUGGING) {
-    $con = mysql_connect("localhost", 'ctcweb9_ctcadmin', 'murgatr0ad');
-    $con || die('Could not connect to database');
-    mysql_select_db('ctcweb9_newsletter') || die('Could not open database');
+    $db = mysqli_connect("localhost", 'ctcweb9_ctcadmin', 'murgatr0ad');
+    $db || die('Could not connect to database');
+    $db->select_db('ctcweb9_newsletter') || die('Could not open database');
     $filename = "newsletterTemplate.odt";
     $template = file_get_contents($filename);
-    $engine = new XmlTemplateEngine();
+    $engine = new XmlTemplateEngine($db);
     $result = $engine->processOdtTemplate($template);
     $outFile = fopen('result.odt', 'w');
     fwrite($outFile, $result);

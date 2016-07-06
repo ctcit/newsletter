@@ -3,7 +3,7 @@ require 'newsletter.inc.php';
 
 if (count($processor->userpositions) == 0)
 {
-	echo "<script>window.location.replace('http://www.ctc.org.nz');</script>";
+	echo "<script>window.location.replace('" . BASE_URL . "');</script>";
 	die('Not logged on');
 }
 

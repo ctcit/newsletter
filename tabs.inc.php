@@ -38,11 +38,11 @@
 		<td style="width:100%; text-align:right" class="tabgap">
 		Generate:
 		<?php
-		$docrows = mysql_query("select replace(name,'.odt','') name from ctcweb9_newsletter.documents 
-							 where name like '%.odt' and name not like '%merge%'",$con);
+		$docrows = $con->query("select replace(name,'.odt','') name from ctcweb9_newsletter.documents 
+							 where name like '%.odt' and name not like '%merge%'");
 		$docdate = date('Ymd_Hms');
 
-		while ($docrow = mysql_fetch_array($docrows))
+		while ($docrow = mysqli_fetch_array($docrows))
 			echo " <input type=\"button\" onclick=\"Save(null,'$docrow[name].odt')\" 
 				 	value=\"$docrow[name]\" class=\"linkbutton\" title=\"Generate the $docrow[name] document\"/>";
 		?>

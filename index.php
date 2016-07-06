@@ -24,9 +24,9 @@
 	    <li><a class="link" href="javascript:Submit('events','type','Social Event')">Edit Social Events</a></li>
         <li><a class="link" href="../scripts/processNewsletterEvents.php" onclick="return confirm('Rewrite trip list and social events to website. Are you sure?')" target="_blank">Publish trips and social events to web site</a></li>
 		<?php
-		$rows = mysql_query("select 'All' section UNION select distinct section from ctcweb9_newsletter.notices",$con);
+		$rows = $con->query("select 'All' section UNION select distinct section from ctcweb9_newsletter.notices");
 
-		while ($row = mysql_fetch_array($rows))
+		while ($row = mysqli_fetch_array($rows))
 		{
 			echo "<li><a class='link' href=\"javascript:Submit('notices','section','$row[section]')\">Edit Notices ($row[section])</a></li>";
 		}
@@ -41,16 +41,16 @@
 
 		if ($_GET['resetuserpreferences'] == '1')
 		{
-			mysql_query("delete from ctcweb9_newsletter.fields
+			$con->query("delete from ctcweb9_newsletter.fields
 						where `name` like '$processor->username.%'
-						and `type` = 'User Preference'",$con);
+						and `type` = 'User Preference'");
 		}
 		?>
 		</ul>
 		<h2>Instructions for Trip organisers, Social Convenors and Notice Contributors</h2>
 		<ol>
-		<li>Log in to <a href="http://www.ctc.org.nz">http://www.ctc.org.nz</a> using your user name.</li>
-		<li>Navigate to <a href="http://www.ctc.org.nz/newsletter/index.php">http://www.ctc.org.nz/newsletter/index.php</a> .</li>
+		<li>Log in to <a href="<?php echo BASE_URL; ?>"><?php echo BASE_URL; ?></a> using your user name.</li>
+		<li>Navigate to <a href="<?php echo BASE_URL; ?>/newsletter/index.php"><?php echo BASE_URL; ?>/newsletter/index.php</a> .</li>
 		<li>Click on "Edit Weekend Trips" or whatever is appropriate for you.</li>
 		<li>Scroll down to one of the bottom ten rows (they are grey, and the place new entries are entered)</li>
 		<li>Click one of the <input value="+" type="button" class="tool" /> buttons,

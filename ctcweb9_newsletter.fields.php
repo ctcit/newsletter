@@ -16,8 +16,8 @@
 
 		$date        = $_POST["date"];
 
-		if (!mysql_query("UPDATE ctcweb9_newsletter.fields SET `order` = id WHERE `order` < 0",$con))
-			die(mysql_error($con));
+		if (!$con->query("UPDATE ctcweb9_newsletter.fields SET `order` = id WHERE `order` < 0"))
+			die($con->error);
 
 		$table 		= 'ctcweb9_newsletter.fields';
 		$tableroot	= 'ctcweb9_newsletter.fieldsGrouped';

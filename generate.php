@@ -130,7 +130,7 @@ class RtfGenerator
     function GenerateOdt($template)
     {
         require_once("generate_odt.php");
-        $engine = new XmlTemplateEngine();
+        $engine = new XmlTemplateEngine($this->con);
         return $engine->processOdtTemplate($template);
     }
 
@@ -183,13 +183,13 @@ class RtfGenerator
             }
             else  {
                 $sql = $this->fielddata[$field]["sql"];
-                $rows  = mysql_query($sql,$this->con);
+                $rows  = $this->con->query($sql);
 
-                if (!$rows || mysql_num_rows($rows) != 1) {
+                if (!$rows || mysqli_num_rows($rows) != 1) {
                     $fields[$i] = "<ctc:queryfailed sql=\"$sql\"/>";
                 }
                 else {
-                    $row = mysql_fetch_row($rows);
+                    $row = mysqli_fetch_row($rows);
                     $fields[$i] = $row[0];
                 }
             }
@@ -203,13 +203,13 @@ class RtfGenerator
     {
         $xml    = "";
         $sql    = $this->fielddata[$source]["sql"];
-        $rows   = mysql_query($sql,$this->con);
+        $rows   = $this->con->query($sql);
 
         if (!$rows) {
-            die($sql.mysql_error());
+            die($sql.$this->con->error);
         }
 
-        while ($rowMixedCase = mysql_fetch_array($rows)) {
+        while ($rowMixedCase = mysqli_fetch_array($rows)) {
             $row = Array();
 
             foreach ($rowMixedCase as $col => $val) {
@@ -290,7 +290,7 @@ class RtfGenerator
         if ($includehtmlbookmark && $row['source'] != '' && $row['id'] != '')
         {
             $inc = explode('"',$this->RtfField( $template, 'includehtmlbookmark' ));
-            $inc[1] = "\"http://www.ctc.org.nz$_SERVER[PHP_SELF]?source=$row[source]&id=$row[id]&col=$col&bookmark=1\"";
+            $inc[1] = '"' . BASE_URL . "/$_SERVER[PHP_SELF]?source=$row[source]&id=$row[id]&col=$col&bookmark=1\"";
             $this->debugtext .= "includehtml=$inc[1]<br/>\n";
             return FieldImplode($inc);
         }
@@ -319,14 +319,14 @@ class RtfGenerator
     {
         $rtf    = "";
         $sql    = $this->fielddata[$source]["sql"];
-        $rows   = mysql_query($sql,$this->con);
+        $rows   = $this->con->query($sql);
         
         if (!$rows)
-            die($sql.mysql_error());
+            die($sql.$this->con->error);
             
         $this->debugtext .= "sql=$sql<br/>\n";
         
-        while ($rowMixedCase = mysql_fetch_array($rows))
+        while ($rowMixedCase = mysqli_fetch_array($rows))
         {
             $row = Array();
             

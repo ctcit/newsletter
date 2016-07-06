@@ -21,7 +21,7 @@
 		
 		if ($date == "Current" || $date == "")    $where .= " AND $table.date >= '$issuedate'";
 
-		mysql_query("UPDATE $table SET `order` = id WHERE `order` < 0");
+		$con->query("UPDATE $table SET `order` = id WHERE `order` < 0");
 		
 		$year		= substr($issuedate,0,4);
 		$cols   	= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
