@@ -493,7 +493,7 @@ class XmlTemplateEngine {
         }
         else {
             $rows = array();
-            while ($row = $this->db->fetch_assoc($forEachQueryResult)) {
+            while ($row = mysqli_fetch_assoc($forEachQueryResult)) {
                 $rows[] = $row;
             }
         }
