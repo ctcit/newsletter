@@ -273,7 +273,7 @@
             if (comp.type == 'trip'   && comp.cost == '')       return '<span class=qc>No cost</span>';
             if (comp.type == 'trip'   && socialgrade)           return '<span class=qc>Wrong grade</span>';
             if (comp.type == 'social' && !socialgrade)          return '<span class=qc>Wrong grade</span>';
-            if (comp.grade == 'clubnight' && dow != 'Thursday') return '<span class=qc>Club night not Thursday</span>';
+            if (comp.grade == 'clubnight' && dow != 'Wednesday') return '<span class=qc>Club night not Wednesday</span>';
             if (comp.triplength == 2 && dow != 'Saturday')      return '<span class=qc>Weekend trip not Saturday</span>';
 
             return '';
