@@ -48,7 +48,7 @@ class XmlTemplateEngine {
      * Construct a new xmlTemplateEngine.
      * The first parameter is a database object (mysqli).
      * The optional parameter is a list of table rows to be used
-     * if a foreach command is encountered without an query argument.
+     * if a foreach command is encountered without a query argument.
      */
     function __construct($db, $tableRows = null) {
         $this->db = $db;
