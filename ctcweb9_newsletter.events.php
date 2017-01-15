@@ -67,7 +67,7 @@
                         WHERE status = 'Active'
                         ORDER BY name";
         $eventtypes  = "select 'Social' name union select 'Trip' name";
-        $departurepoints = "select 'Z (Shell) Papanui' name union select 'Caltex Russley' name union select 'Contact Leader' name";
+        $departurepoints = "select 'Z Station Papanui' name union select 'Caltex Russley' name union select 'Contact Leader' name";
 
         $cols        = JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
         $rows        = JsonFromQuery($con,"SELECT *, ($searchexpr) found
