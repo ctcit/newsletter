@@ -8,7 +8,7 @@ function RtfStrip($s)
 	for ($i = 0; $i < strlen($s);)
 	{
 		$ch = substr($s,$i,1);
-		
+
 		if ($ch == '\\')
 		{
 			$i++;
@@ -32,7 +32,7 @@ function RtfStrip($s)
 			$i++;
 		}
 	}
-	
+
 	return trim($out);
 }
 
@@ -40,7 +40,7 @@ function RtfStrip($s)
 function RtfStripTags($s)
 {
 	$a = FieldExplode($s,"<",">");
-	
+
 	for ($i = 1; $i < count($a); $i += 2)
 		$a[$i] = "<".RtfStrip($a[$i]).">";
 
@@ -53,14 +53,14 @@ function RtfIsValid($rtf)
 	$rtf    = trim($rtf);
 	$length = strlen($rtf);
 	$indent = 0;
-	
+
 	for ($i = 0; $i < $length && $indent >= 0; $i++)
 	{
 		if ($rtf[$i] == '{') $indent++;
 		if ($rtf[$i] == '}') $indent--;
 		if ($rtf[$i] == '\\') $i++;
 	}
-	
+
 	return $indent == 0 && $length > 0 && $rtf[0] == '{' && $rtf[$length-1] == '}';
 }
 
@@ -111,7 +111,7 @@ function FieldExplode($s,$open,$close)
 {
     $arr        = array();
     $posclose   = 0;
-    
+
     while ($posclose < strlen($s))
     {
         $posopen = strpos($s,$open,$posclose);
@@ -120,18 +120,18 @@ function FieldExplode($s,$open,$close)
             $arr[] = substr($s,$posclose);
             break;
         }
-        
+
         $arr[] = substr($s,$posclose,$posopen-$posclose);
         $posopen += strlen($open);
 
         $posclose = strpos($s,$close,$posopen);
         if ($posclose === false)
             $posclose = strlen($s);
-            
-        $arr[] = substr($s,$posopen,$posclose-$posopen);            
+
+        $arr[] = substr($s,$posopen,$posclose-$posopen);
         $posclose += strlen($close);
     }
-    
+
     return $arr;
 }
 
@@ -141,8 +141,8 @@ function FieldImplode($arr)
     $s = '';
     foreach ($arr as $line)
         $s .= $line;
-        
-    return $s;        
+
+    return $s;
 }
 
 // Converts a string to something that can be included in a javascript string
@@ -161,10 +161,10 @@ function JsonFromRow($queryrow)
     $js  = "";
     foreach ($queryrow as $col => $val)
     {
-        if (ereg("[a-zA-Z]",$col))
+        if (preg_match("[a-zA-Z]",$col))
             $js .= JsonFromString(strtolower($col)).':'.JsonFromString($val).',';
     }
-    
+
     return trim($js,",");
 }
 
@@ -187,35 +187,35 @@ function JsonFromQuery($con,$query,$echoquery = true, $array = false)
 		else
 			$js .= JsonFromString(strtolower($queryrow[0])).":{".JsonFromRow($queryrow)."},\n";
 	}
-    
+
     return trim($js,",\n");
 }
 
 function ArrayToOptions($arr,$selected,$default)
 {
 	$options = "";
-	
+
 	if (!array_key_exists($selected,$arr))
 		$selected = $default;
-	
+
 	foreach ($arr as $value => $title)
 	{
 		if ($value == $selected)
-			$options .= "<option title='$title' selected>$value</option>\n";			
+			$options .= "<option title='$title' selected>$value</option>\n";
 		else
-			$options .= "<option title='$title'>$value</option>\n";			
+			$options .= "<option title='$title'>$value</option>\n";
 	}
-	
+
 	return $options;
 }
 
 function ArrayToList($arr)
 {
 	$s = "";
-	
+
 	foreach ($arr as $key => $val)
 		$s .= "'".addslashes($key)."',";
-	
+
 	return trim($s,",");
 }
 
@@ -228,7 +228,7 @@ function ArrayFromQuery($con, $query)
 
     while ($row = mysqli_fetch_array($queryrows))
 		$arr[$row[0]] = $row[1];
-	
+
 	return $arr;
 }
 
@@ -246,7 +246,7 @@ function ValueFromSql($con,$query)
 
 function SetField($con,$name,$value,$type)
 {
-	$con->query("INSERT INTO ctcweb9_newsletter.fields(`name`,`value`,`type`) 
+	$con->query("INSERT INTO ctcweb9_newsletter.fields(`name`,`value`,`type`)
 												VALUES('$name','$value','$type')
 				ON DUPLICATE KEY UPDATE `value`='$value'");
 }
@@ -255,36 +255,36 @@ function ProcessFields($con)
 {
     $queryrows = $con->query("SELECT * FROM ctcweb9_newsletter.`fields`");
 	$out = array();
-    
+
     if (!$queryrows)
         die($con->error);
 
     while ($row = mysqli_fetch_array($queryrows))
     {
         $asql   = FieldExplode($row["sql"],"{","}");
-		
+
 		for ($i = 1; $i < count($asql); $i += 2)
 			$asql[$i] = $row[$asql[$i]];
-			
+
 		$sql		= FieldImplode($asql);
         $id     	= $row["id"];
 		$override	= $row["valueoverride"];
-		
+
 		if 		($override == "" && $sql == "")
 			$value  = $row["value"];
 		else if ($override != "")
 			$value  = $override;
         else
             $value = ValueFromSql($con,$sql);
-        
+
 		$out[strtolower($row["name"])] = array( "value" => $value, "sql" => $sql );
-        
+
 		if ($value != $row["value"] &&
-			!$con->query("update ctcweb9_newsletter.`fields` 
+			!$con->query("update ctcweb9_newsletter.`fields`
 							set value='".addslashes($value)."' where id = $id"))
 			die($con->error);
     }
-	
+
 	return $out;
 }
 
@@ -297,7 +297,7 @@ class PostProcessor
 	var $con;
 	var $userpositions;
 	var $username;
-	
+
 	function PostProcessor($con,$username)
 	{
 		// get the information about the current user from the sessions table
@@ -309,7 +309,7 @@ class PostProcessor
              WHERE loginName='$username'
              AND members_roles.memberId = view_members.memberId
              AND members_roles.roleId = roles.id");
-		//$this->userpositions	= ArrayFromQuery($con,"select con_position, jos_contact_details.name 
+		//$this->userpositions	= ArrayFromQuery($con,"select con_position, jos_contact_details.name
 		//												from jos_contact_details, jos_users
 		//												where jos_users.username = '$this->username'
 		//												and jos_users.name = jos_contact_details.name");
@@ -322,29 +322,29 @@ class PostProcessor
 			return "";
 
 		$rows = array();
-		
+
 	    foreach ($post as $name => $valueRaw)
 	    {
 	    	$value = addslashes($valueRaw);
-			$regs = split(",",$name);
-		
+			$regs = explode(",",$name);
+
 			switch ($regs[0])
 			{
 	        case "datetime":
 		        $this->datetime = $value;
 				break;
-				
+
 			case "uservalue":
 				SetField($this->con,$this->username.".".$post['usersetting'],
 									$value,'User Preference');
 				break;
-				
+
 			case "create":
 				// create,database,table,id,column
 	            $table = $regs[1].".".$regs[2];
 	            $id    = $regs[3];
 	            $col   = $regs[4];
-	            
+
 	            if (array_key_exists($id,$rows))
 	                $rows[$id]["set"] .= ", `$col` = '$value'";
 				else
@@ -355,13 +355,13 @@ class PostProcessor
 
 	            $rows[$id]['hist'][] = ", `column` = '$col', `after` = '$value'";
 				break;
-				
+
 			case "update":
 	        	// update,database,table,id,column
 	            $table   = $regs[1].".".$regs[2];
 	            $id      = $regs[3];
 	            $col     = $regs[4];
-	            
+
 	            if (array_key_exists($id,$rows))
 	                $rows[$id]["set"] .= ", `$col` = '$value'";
 	            else
@@ -373,11 +373,11 @@ class PostProcessor
 										"hist"	=>array());
 
 	            $before = addslashes(ValueFromSql($this->con,"SELECT `$col` FROM $table WHERE id = $id"));
-	        
-	            $rows[$id]['hist'][] = ", `column` = '$col', `after` = '$value', 
+
+	            $rows[$id]['hist'][] = ", `column` = '$col', `after` = '$value',
 															 `before` = '$before'";
 				break;
-				
+
 			case "delete":
 				// delete,database,table,id
 	            $table = $regs[1].".".$regs[2];
@@ -407,14 +407,14 @@ class PostProcessor
 				$id = ValueFromSql($this->con,"SELECT max(id) FROM $table");
 
 			$sql = "INSERT INTO $this->historyitem
-					SET `datetime`='".$this->datetime."', `table`='$row[table]', `id`='$id', 
+					SET `datetime`='".$this->datetime."', `table`='$row[table]', `id`='$id',
 						`action`='$row[action]', `username`='".$this->username."'";
 	        if (!$this->con->query($sql))
 			{
 	            $this->errors .= "$sql\n".$this->con->error."<br/>\n";
 				continue;
 			}
-			
+
 			$itemid = ValueFromSql($this->con,"SELECT max(itemid) FROM $this->historyitem");
 
 	        foreach ($row["hist"] as $hist)
@@ -424,7 +424,7 @@ class PostProcessor
 	                $this->errors .= "$sql\n".$this->con->error."<br/>\n";
 	        }
 	    }
-	    
+
 	    return $this->errors;
 	}
 
@@ -439,12 +439,12 @@ class PostProcessor
 		$ext			= str_replace(".","",strtolower(substr($name,strrpos($name,"."))));
 		$table			= 'ctcweb9_newsletter.documents';
 		$exts			= ValueFromSql($this->con, "SELECT `value`
-											FROM ctcweb9_newsletter.fields 
+											FROM ctcweb9_newsletter.fields
 											WHERE name = 'acceptabledocumenttypes'");
-									 
+
 		if ($exts == "" || strpos(",$exts,",",$ext,") === FALSE)
 			return "The uploaded file (".$files['upload']['name'].") was not a valid file";
-			
+
 		switch ($ext)
 		{
 		case "rtf":
@@ -455,15 +455,15 @@ class PostProcessor
 				return "The uploaded file ($files[upload][name]) was not a genuine RTF file";
 			break;
 		}
-		
+
 		$hand = fopen($tmp, "r");
 		$size = filesize($tmp);
 		$data = addslashes(fread($hand, $size));
 		fclose($hand);
-		
+
 		if (!$data)
 			return "Could not read file - $tmp";
-			
+
 		if (ValueFromSql($this->con,"SELECT id FROM $table WHERE `name` = '$name'") == "")
 			$sql = "INSERT INTO $table SET `size`=$size, `data`='$data', uploaded='$this->datetime', `name`='$name'";
 		else
@@ -471,14 +471,14 @@ class PostProcessor
 
 	    if (!$this->con->query($sql))
 			return "$name\n".$this->con->error;
-			
+
 		$id = ValueFromSql($this->con, "SELECT id FROM $table WHERE `name` = '$name'");
 		$sql = "INSERT INTO $this->historyitem
-					SET `datetime`='$this->datetime', `table`='$table', `id`='$id', 
+					SET `datetime`='$this->datetime', `table`='$table', `id`='$id',
 						`action`='Uploaded', `username`='$this->username'";
 	    if (!$this->con->query($sql))
 			return "$name\n" . $this->con->error;
-			
+
 		return "";
 	}
 }
