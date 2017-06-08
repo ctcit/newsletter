@@ -669,6 +669,7 @@ class XmlTemplateEngine {
         // Replace various common html entities with UTF-8, leaving &lt; and &gt;
         // unchanged, as they're used for HTML structure, still to be processed.
         $s = str_replace(array('&lt;', '&gt;'), array('&__lt;', '&__gt;'), $s); // Hack!
+        $s = str_replace(array('&#039;'), array('&rsquo;'));
         $s = html_entity_decode($s, ENT_COMPAT, 'UTF-8');
         $s = str_replace(array('&__lt;', '&__gt;'), array('&lt;', '&gt;'), $s);
         return $s; 

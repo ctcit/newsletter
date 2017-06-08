@@ -7,7 +7,8 @@
 			<?php require 'editor.css';?>
 			#fieldstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload=Load()>
 		<script>
@@ -43,8 +44,8 @@
 		<div id="node_<?php echo $tableroot;?>"></div>
 		<div id="menu"></div>
 	    <script>
-	        <?php    
-	        echo 
+	        <?php
+	        echo
 	            "
 				var root = 	{table:     	'$tableroot',
 	                         cols:        	{ $groupcols },
@@ -58,8 +59,8 @@
 							 where:			\"1\",
 							 linkcolumn:  	'type',
 	                         sortdefault: 	'order',
-	                         source:      	{data: 			{query: \"$positions\"	}, 
-											column: 		{query: \"$columns\" 	}, 
+	                         source:      	{data: 			{query: \"$positions\"	},
+											column: 		{query: \"$columns\" 	},
 											'type':			{query: \"$types\" 		} },
 	                         custom:	  	{order:    		{head: true, ro:   true, sortorder:-1},
 											name:    	 	{head: true},

@@ -7,7 +7,8 @@
             <?php require 'editor.css';?>
             #eventstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
         </style>
-        <script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
     </head>
     <body onload="Load()">
         <script>

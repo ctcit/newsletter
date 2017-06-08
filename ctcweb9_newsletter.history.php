@@ -9,7 +9,8 @@
 			.before { color: darkred;}
 			.after  { color: green;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload="Load();LoadTableData();">
 	<script>
@@ -32,10 +33,10 @@
 								"ctcweb9_newsletter.newsletters"	=>"Select history for this table");
 		$filterdates	= array("All"								=>"Select history for all dates",
 								"Current"							=>"Select history for the current newsletter");
-		$filterdates	+= ArrayFromQuery($con,"SELECT	distinct date_format(datetime,'%Y-%m')	value, 
+		$filterdates	+= ArrayFromQuery($con,"SELECT	distinct date_format(datetime,'%Y-%m')	value,
 														'Select history for this month' 		title
 												FROM   $table");
-		$startdate 		= ValueFromSql($con,"SELECT max(DATE_ADD(prev.issuedate,INTERVAL 1 DAY)) 
+		$startdate 		= ValueFromSql($con,"SELECT max(DATE_ADD(prev.issuedate,INTERVAL 1 DAY))
 											 FROM   ctcweb9_newsletter.newsletters prev,
 													ctcweb9_newsletter.newsletters curr
 											 WHERE  prev.issuedate < curr.issuedate AND curr.iscurrent");
@@ -45,13 +46,13 @@
 
 		if ($filtertable != "All")
 			$where .= " AND `table` = '$filtertable'";
-			
+
 		if ($filterids != "")
 			$where .= " AND `id` in ($filterids)";
-			
+
 		if ($filterids != "" && $filterdate == "")
 			$filterdate = "All";
-			
+
 		if ($filterlimit == "" || $filterlimit == "0")
 			$filterlimit = "1000";
 
@@ -60,9 +61,9 @@
 		else if ($filterdate != "All")
 			$where	.= " AND date_format(`datetime`,'%Y-%m') like '$filterdate%'";
 
-		$tablerows	= JsonFromQuery($con,"SELECT * FROM $table WHERE $where 
+		$tablerows	= JsonFromQuery($con,"SELECT * FROM $table WHERE $where
 										  ORDER BY itemid desc LIMIT 0, $filterlimit");
-		$tables		= JsonFromQuery($con,"SELECT distinct `table` FROM $table WHERE $where 
+		$tables		= JsonFromQuery($con,"SELECT distinct `table` FROM $table WHERE $where
 										  ORDER BY itemid desc LIMIT 0, $filterlimit");
 		?>
 		</script>
@@ -89,8 +90,8 @@
 		<div id="node_<?php echo $table;?>"></div>
 		<div id="menu"></div>
 	    <script>
-	        <?php    
-	        echo 
+	        <?php
+	        echo
 	            "
 	            var root = { table:	  	 	'$table',
 	                         cols:       	{ $tablecols },
@@ -111,11 +112,11 @@
 							 linkcolumn:	'itemid',
 							 columns:		\"*\",
 							 custom:	  	{column:   	{head: 			true},
-											 before:	{newrow:    	true,	
-														 ReadOnlyHtml:	CompareHtml, 
+											 before:	{newrow:    	true,
+														 ReadOnlyHtml:	CompareHtml,
 														 CellUpdate:	AlwaysTrue},
-											 after:		{newcolumn: 	true,	
-														 ReadOnlyHtml:	CompareHtml, 
+											 after:		{newcolumn: 	true,
+														 ReadOnlyHtml:	CompareHtml,
 														 CellUpdate:	AlwaysTrue}}};
 				root.children = [ detail ];
 	            ";
@@ -129,35 +130,35 @@
 						 replace(new RegExp('<','g'),'&lt;').
 						 replace(new RegExp('>','g'),'&gt;');
 			}
-			
+
 			function TableIndexInfo(data)
 			{
 				ObjectCopy(data,this);
 				this.ids = {};
 				this.Request();
 			}
-			
+
 			TableIndexInfo.prototype.StateChange = function()
 			{
 				if (this.request.readyState != 4)
 					return;
-					
+
 				var indexes = eval("(" + this.request.responseText + ")");
 				var idcol 	= 'id', expr = '';
-					
+
 				for (var index in indexes)
 				{
 					if 		(indexes[index].key_name == "PRIMARY")
 						idcol = indexes[index].column_name;
 					else if (indexes[index].non_unique == 0)
-						expr += ",' " 		+ indexes[index].column_name + ":'"  + 
+						expr += ",' " 		+ indexes[index].column_name + ":'"  +
 								",'<b>',`"	+ indexes[index].column_name + "`,'</b>'";
 				}
-				
+
 				this.query		= "select concat(''" + expr + ") id from " + this.table + " where " + idcol + "=";
 				this.request	= null;
 			}
-			
+
 			TableIndexInfo.prototype.Request = function()
 			{
 				var table = this;
@@ -167,13 +168,13 @@
 				this.request.onreadystatechange = function() {table.StateChange(); };
 				this.request.send(null);
 			}
-			
+
 			function LoadTableData()
 			{
 				for (var i in root.tables)
 					root.tables[i] = new TableIndexInfo(root.tables[i]);
 			}
-			
+
 			function GenericId(row)
 			{
 				var id		= row.data.id;
@@ -184,13 +185,13 @@
 					return table.ids[id];
 
 				var request = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("MSXML2.XMLHTTP.3.0");
-				
+
 				request.open( "GET", "json.php?array=" + table.query + id, true );
-				request.onreadystatechange = function() 
+				request.onreadystatechange = function()
 				{
 					if (request.readyState != 4)
 						return;
-							
+
 					var data = eval("(" + request.responseText + ")");
 					var html = id + ' ( ' + (data.length == 0 ? '<b>Deleted</b>' : data[0].id) + ' )';
 
@@ -202,31 +203,31 @@
 
 				return id + " Loading...";
 			}
-			
+
 			function CompareHtml(row)
 			{
 				var istart = 0, istop = 0;
 				var before = row.data.before;
 				var after = row.data.after;
 				var target = row.data[this.field];
-				
-				while (istart < before.length && 
-					   istart < after.length && 
+
+				while (istart < before.length &&
+					   istart < after.length &&
 					   before[istart] == after[istart])
 					istart++;
-					   
-				while (istop < before.length-istart && 
-					   istop < after.length-istart && 
+
+				while (istop < before.length-istart &&
+					   istop < after.length-istart &&
 					   before[before.length-1-istop] == after[after.length-1-istop])
 					istop++;
-					   
-				return	StripTag(target.substr(0,istart)) + 
+
+				return	StripTag(target.substr(0,istart)) +
 						"<span class=" + this.field + ">" +
 						StripTag(target.substr(istart,target.length-istart-istop))+
 						"</span>" +
 						StripTag(target.substr(target.length-istop));
 			}
-			
+
 			function PostBuildHistory()
 			{
 				this.PostBuildBase = DataTable.prototype.PostBuild;

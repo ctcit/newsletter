@@ -7,7 +7,8 @@
 			<?php require 'editor.css';?>
 			#reportstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload="Load()">
 		<script>
@@ -18,11 +19,11 @@
 		$date       = $_POST["date"];
 		$current    = CurrentDates($con);
 		$issuedate  = $current["issuedate"];
-		
+
 		if ($date == "Current" || $date == "")    $where .= " AND $table.date >= '$issuedate'";
 
 		$con->query("UPDATE $table SET `order` = id WHERE `order` < 0");
-		
+
 		$year		= substr($issuedate,0,4);
 		$cols   	= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
 		$rows   	= JsonFromQuery($con,"SELECT * FROM $table WHERE $where");
@@ -42,7 +43,7 @@
 					"  AND   jos_sections.id = jos_content.sectionid ".
 					"  AND   jos_categories.id = jos_content.catid ".
 					"  ORDER BY jos_categories.name, jos_content.id ".
-		
+
 					" UNION ". */
 					" SELECT tripreport.id as `id`, ".
 					"     concat(tripreport.year, ' ', tripreport.title, ".
@@ -52,10 +53,10 @@
 					"     tripreport.year = '$year' AND ".
 					"	  NOT (tripreport.id IN (SELECT reportid FROM $table)) `common` ".
 					" from ctcweb9_tripreports.tripreport";
-		
+
 		// TODO reimplement Aunty Iceaxe report inclusion
 		// TODO disambiguate Aunty Iceaxe reports from Trip Reports (?)
-		
+
 		$images	= 	"SELECT DISTINCT image1 name FROM $table UNION ".
 					"SELECT DISTINCT image2 name FROM $table UNION ".
 					"SELECT DISTINCT image3 name FROM $table UNION ".
@@ -64,7 +65,7 @@
 					"SELECT DISTINCT image6 name FROM $table";
 
 		// TODO reimplement image handling
-		
+
 		$settings = JsonFromQuery($con,"SELECT name, value FROM ctcweb9_newsletter.fields WHERE `type`='setting'");
 
 		?>
@@ -85,8 +86,8 @@
 			<div id="node_<?php echo $table;?>"></div>
 			<div id="menu"></div>
 		    <script>
-		        <?php    
-		        echo 
+		        <?php
+		        echo
 		            "
 					var images = { data: {".JsonFromQuery($con,$images)."} };
 		            var root = {table:   	 '$table',
@@ -139,7 +140,7 @@
 			return "<a href=\"" +
                     "../tripreports/index.html#/tripreports/" +
 		           data.reportid + "/\">Go to report</a>";
-		}                            
+		}
 
 		function MakeTitleObj(data)
 		{
@@ -148,17 +149,17 @@
 		        return {title:'',titledate:''};
 		    else
 			    return {title: obj.title, titledate: obj.date};
-		        
+
 		    /*var title = root.cols.reportid.source.Data()[data.reportid].title;
 		    var index = title.indexOf(': ');
-		    
+
 		    if (index < 0)  index = title.indexOf('. ');
 		    if (index < 0)  index = title.indexOf(', ');
-		    
+
 		    return {titledate: title.substr(0,index),
 		            title:     title.substr(index+1,title.length)}; */
 
-		}                            
+		}
 
 		function MakeTitle(data)
 		{
@@ -178,7 +179,7 @@
 			for (var i = 1; data["image" + i] != null; i++)
 			{
 				var options = data["image" + i].replace(re,'').split('(')[0];
-			
+
 				if (options == '')
 					continue;
 
@@ -187,11 +188,11 @@
 				images +=	'<!'+'-- INCLUDE INCLUDEPICTURE '+src+' --'+'>' +
 							'<img src="'+src+'" />';
 			}
-			
+
 			return	(trampers == "" ? ""  : "<p>Trampers: " + trampers + "</p>\r\n") +
 					(images   == "" ? ""  : "<div style='width:"+root.settings.rtfpagewidth.value+"px'>" + images + "</div>\r\n");
 		}
-		        
+
 	    </script>
 	</body>
 </html>

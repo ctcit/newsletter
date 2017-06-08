@@ -7,7 +7,8 @@
 			<?php require 'editor.css';?>
 			#documentstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload="Load()">
 		<script>
@@ -37,8 +38,8 @@
 		<div id="node_<?php echo $table;?>"></div>
 		<div id="menu"></div>
 	    <script>
-	        <?php    
-	        echo 
+	        <?php
+	        echo
 	            "
 	            var root = {table:   		'$table',
 	                         cols:      	{ $cols },
@@ -63,20 +64,20 @@
 				var extparts	= name.split(".");
 				var ext			= extparts[extparts.length-1];
 				var warning		= ext + " is not a valid document type";
-				var exts		= root.settings.acceptabledocumenttypes.value.split(","); 
-				
+				var exts		= root.settings.acceptabledocumenttypes.value.split(",");
+
 				for (var i in exts)
 				{
 					if (ext != "" && ext == exts[i] && extparts.length > 1)
 						warning = "";
 				}
-				
+
 				for (var i in root.rows)
 				{
 					if (name != "" && name == root.rows[i].data.name.toLowerCase())
 						warning = name + " already exists";
 				}
-				
+
 				document.getElementById('uploadwarning').innerHTML = name == "" ? "" : warning;
 			}
 		</script>

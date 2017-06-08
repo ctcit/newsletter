@@ -7,7 +7,8 @@
 			<?php require 'editor.css';?>
 			#newsletterstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload=Load()>
 		<script>
@@ -30,8 +31,8 @@
 		<div id="node_<?php echo $table;?>"></div>
 		<div id="menu"></div>
 	    <script>
-	        <?php    
-	        echo 
+	        <?php
+	        echo
 	            "
 	            var root = {table:  	  '$table',
 	                         cols:        { $cols },
@@ -50,14 +51,14 @@
 	        {
 	            if (!Number(data.iscurrent))
 	                return data.iscurrent;
-	                
+
 	            for (var y in root.rows)
 	                undo.Set(root.rows[y],'iscurrent',data.id == root.rows[y].data.id ? '1' : '0');
 
 	            for (var y in root.rows)
 	                root.rows[y].Update();
-	                
-	            return data.iscurrent;                
+
+	            return data.iscurrent;
 	        }
 	    </script>
 	</body>

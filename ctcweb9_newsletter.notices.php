@@ -7,7 +7,8 @@
 			<?php require 'editor.css';?>
 			#noticestab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload=Load()>
 		<script>
@@ -25,7 +26,7 @@
 
 		if ($section != "All" && $section != "")  $sectionexpr = "`section` = '$section'";
 		if ($date == "Current" || $date == "")    $dateexpr    = "`date` >= '$issuedate'";
-		if ($search != "")         				  $searchexpr  = "((`title` LIKE '%$search%') OR ". 
+		if ($search != "")         				  $searchexpr  = "((`title` LIKE '%$search%') OR ".
 						                                         " (`text`  LIKE '%$search%'))";
 
 		$sections	= array("All"			=>"");
@@ -58,7 +59,7 @@
 		<div id="node_<?php echo $tableroot;?>"></div>
 		<div id="menu"></div>
 	    <script>
-	        <?php    
+	        <?php
 			$groupcols	= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table LIKE 'id'").','.
 						  JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table LIKE 'section'");
 			$grouprows	= JsonFromQuery($con,"SELECT min(id) id, section, SUM($searchexpr) found ".
@@ -69,7 +70,7 @@
 			$sections   = "SELECT DISTINCT section name FROM $table";
 			$documents  = "SELECT name FROM ctcweb9_newsletter.documents";
 
-	        echo 
+	        echo
 	            "
 				var root = 	{table:     	'$tableroot',
 	                         cols:      	{ $groupcols },
@@ -94,7 +95,7 @@
 												title:  	   {head:true},
 												date:   	   {head:true},
 												text:		   {Show:	ShowText,
-																height: 200, 
+																height: 200,
 																Wysiwyg: WysiwygFunction},
 												includepreview:{Show:	ShowIncludePreview,
 																ro:		true,
@@ -117,9 +118,9 @@
 			function MakeIncludePreview(data)
 			{
 				var re  = new RegExp(" ","g");
-				var src = "<?php echo BASE_URL; ?>/newsletter/generate.php?name=" + 
+				var src = "<?php echo BASE_URL; ?>/newsletter/generate.php?name=" +
 							data.includedocument.replace(re,'%20');
-				
+
 				if 		(child.source.includedocument.Data()[data.includedocument.toLowerCase()] == null)
 					return 	'';
 				else if (data.includedocument.toLowerCase().indexOf('.rtf') > 0 ||
@@ -137,7 +138,7 @@
 							'<img src="' +src +'&size=1.0" />'+
 							'</div>';
 			}
-			
+
 	    </script>
 	</body>
 </html>
