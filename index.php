@@ -23,6 +23,7 @@
 	    <li><a class="link" href="javascript:Submit('events','type','Day Trips')">Edit Day Trips</a></li>
 	    <li><a class="link" href="javascript:Submit('events','type','Social Event')">Edit Social Events</a></li>
         <li><a class="link" href="../scripts/processNewsletterEvents.php" onclick="return confirm('Rewrite trip list and social events to website. Are you sure?')" target="_blank">Publish trips and social events to web site</a></li>
+        <li><a class="link" href="../tripsignup/api/AddTripsFromNewsletter.php" onclick="return confirm('Publish trip lists for upcoming trips to website. Are you sure?')" target="_blank">Publish upcoming trip lists to web site</a></li>
 		<?php
 		$rows = $con->query("select 'All' section UNION select distinct section from ctcweb9_newsletter.notices");
 
