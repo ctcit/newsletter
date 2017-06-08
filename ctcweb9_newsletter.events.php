@@ -22,15 +22,15 @@
         $searchexpr = "0";
         $where      = "1";
 
-        if (ereg("Social",$type))  $defaults .= ",type:       'Social'";
-        if (ereg("Social",$type))  $defaults .= ",grade:      'Club Night'";
-        if (ereg("Weekend",$type)) $defaults .= ",triplength: '2'";
+        if (preg_match("Social",$type))  $defaults .= ",type:       'Social'";
+        if (preg_match("Social",$type))  $defaults .= ",grade:      'Club Night'";
+        if (preg_match("Weekend",$type)) $defaults .= ",triplength: '2'";
 
-        if (ereg("Social",$type))  $where .= " AND type = 'Social'";
-        if (ereg("Weekend",$type)) $where .= " AND triplength > 1";
-        if (ereg("Day",$type))     $where .= " AND triplength <= 1";
-        if (ereg("Trips",$type))   $where .= " AND type = 'Trip'";
-        if (ereg("[0-9]",$date))   $where .= " AND date_format(date,'%Y-%m') like '$date%'";
+        if (preg_match("Social",$type))  $where .= " AND type = 'Social'";
+        if (preg_match("Weekend",$type)) $where .= " AND triplength > 1";
+        if (preg_match("Day",$type))     $where .= " AND triplength <= 1";
+        if (preg_match("Trips",$type))   $where .= " AND type = 'Trip'";
+        if (preg_match("[0-9]",$date))   $where .= " AND date_format(date,'%Y-%m') like '$date%'";
         if ($date == "Current")    $where .= " AND date >= '$issuedate'";
         if ($date == "")           $where .= " AND date >= '$issuedate'";
         if ($search != "")         $searchexpr = "(leader LIKE '%$search%') OR
@@ -60,8 +60,8 @@
                         "  ORDER BY name";
         $leaders     =  "SELECT fullName AS name,
                         primaryEmail AS email,
-                        homePhone AS phone,
-                        concat( fullName,' ',homePhone,' ',primaryEmail,' ') as title,
+                        preferredPhone AS phone,
+                        concat( fullName,' ',preferredPhone,' ',primaryEmail,' ') as title,
                         fullName in
                             (select leader from $table) as common
                         FROM ctcweb9_ctc.view_members
