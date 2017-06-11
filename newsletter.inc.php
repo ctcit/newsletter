@@ -161,7 +161,7 @@ function JsonFromRow($queryrow)
     $js  = "";
     foreach ($queryrow as $col => $val)
     {
-        if (preg_match("[a-zA-Z]",$col))
+        if (preg_match("/[a-zA-Z]/",$col))
             $js .= JsonFromString(strtolower($col)).':'.JsonFromString($val).',';
     }
 
@@ -288,6 +288,13 @@ function ProcessFields($con)
 	return $out;
 }
 
+// Return the specified $_POST variable or the defaultvalue if not present
+function GetPost($varname, $defaultvalue='')
+{
+    return isset($_POST[$varname]) ? $_POST[$varname] : $defaultvalue;
+}
+
+
 class PostProcessor
 {
     var $historyitem   		= 'ctcweb9_newsletter.historyitem';
@@ -298,16 +305,16 @@ class PostProcessor
 	var $userpositions;
 	var $username;
 
-	function PostProcessor($con,$username)
+	function __construct($con,$username)
 	{
 		// get the information about the current user from the sessions table
 		$this->con 				= $con;
 		$this->username 		= $username;
         $this->userpositions = ArrayFromQuery($con,
-            "SELECT role, fullName
-             FROM ctcweb9_ctc.view_members, ctcweb9_ctc.members_roles, ctcweb9_ctc.roles
+            "SELECT role, concat(firstName, ' ', lastName)
+             FROM ctcweb9_ctc.members, ctcweb9_ctc.members_roles, ctcweb9_ctc.roles
              WHERE loginName='$username'
-             AND members_roles.memberId = view_members.memberId
+             AND members_roles.memberId = members.id
              AND members_roles.roleId = roles.id");
 		//$this->userpositions	= ArrayFromQuery($con,"select con_position, jos_contact_details.name
 		//												from jos_contact_details, jos_users
@@ -430,7 +437,7 @@ class PostProcessor
 
 	function ProcessUpload($files)
 	{
-		if (count($this->userpositions) == 0 || $files['upload']['name'] == "")
+		if (count($this->userpositions) == 0 || !isset($files['upload']) || $files['upload']['name'] == "")
 			return "";
 
 		$name			= $files['upload']['name'];

@@ -23,7 +23,11 @@
 	    <li><a class="link" href="javascript:Submit('events','type','Day Trips')">Edit Day Trips</a></li>
 	    <li><a class="link" href="javascript:Submit('events','type','Social Event')">Edit Social Events</a></li>
         <li><a class="link" href="../scripts/processNewsletterEvents.php" onclick="return confirm('Rewrite trip list and social events to website. Are you sure?')" target="_blank">Publish trips and social events to web site</a></li>
+<<<<<<< HEAD
+        <li><a class="link" href="../tripsignup/api/AddTripsFromNewsletter.php" onclick="return confirm('Publish trip lists for upcoming trips to website. Are you sure?')" target="_blank">Publish upcoming trip lists to web site</a></li>
+=======
         <li><a class="link" href="../tripsignup/api/AddTripsFromNewsletter.php" onclick="return confirm('Update trip signup system. Are you sure?')" target="_blank">Update trip signup system</a></li>
+>>>>>>> master
 		<?php
 		$rows = $con->query("select 'All' section UNION select distinct section from ctcweb9_newsletter.notices");
 
@@ -40,7 +44,7 @@
 		foreach ($processor->userpositions as $pos => $name)
 		    echo "<li>You are logged in as $name and your position is $pos</li>";
 
-		if (isset($_GET['resetuserpreferences']) && $_GET['resetuserpreferences'] == '1')
+		if ($_GET['resetuserpreferences'] == '1')
 		{
 			$con->query("delete from ctcweb9_newsletter.fields
 						where `name` like '$processor->username.%'

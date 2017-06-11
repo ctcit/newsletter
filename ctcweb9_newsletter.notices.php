@@ -7,7 +7,7 @@
 			<?php require 'editor.css';?>
 			#noticestab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script src="//cdn.ckeditor.com/4.7.0/basic/ckeditor.js"></script>
         <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload=Load()>

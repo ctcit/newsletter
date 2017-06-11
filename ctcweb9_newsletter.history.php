@@ -9,7 +9,7 @@
 			.before { color: darkred;}
 			.after  { color: green;}
 		</style>
-        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script src="//cdn.ckeditor.com/4.7.0/basic/ckeditor.js"></script>
         <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload="Load();LoadTableData();">
@@ -63,8 +63,12 @@
 
 		$tablerows	= JsonFromQuery($con,"SELECT * FROM $table WHERE $where
 										  ORDER BY itemid desc LIMIT 0, $filterlimit");
+
+        // RJL: changed order by clause in following to `table` rather than
+        // `itemid` because mysqli barfs on `itemid`. Ordering seems irrelevant
+        // and anyway no-one uses history, do they?
 		$tables		= JsonFromQuery($con,"SELECT distinct `table` FROM $table WHERE $where
-										  ORDER BY itemid desc LIMIT 0, $filterlimit");
+										  ORDER BY `table` desc LIMIT 0, $filterlimit");
 		?>
 		</script>
 	    <form name="newsletterform" method="post" onsubmit="return false">

@@ -644,7 +644,11 @@ function Row_UserUpdate(col,value)
         if (rowshow != this.Show())
         {
             this.size.remeasure = true;
-            $('row'+this.id).innerHTML  = this.Html();
+            // TODO: Alastair! What's going on here?!
+            if (!WysiwygFunction(this.data)) {
+                var target = $('row' + this.id);
+                target.innerHTML  = this.Html();
+            }
         }
 
         this.Update();
@@ -808,17 +812,32 @@ function Column_UpdateInput(row,edit)
 }
 
 Column.prototype.UpdateTextArea = Column_UpdateTextArea;
-function Column_UpdateTextArea(row,edit)
+function Column_UpdateTextArea(row, edit)
 {
+    var editid = edit.id;
+    var editor;
+
     edit.value = row.data[this.field];
 
     if (!this.Wysiwyg(row.data))
         return;
 
-    root.LoadWysiwyg(edit.id);
-    edit.datacol		= this.field;
-    edit.style.width   	= row.size.sizes[edit.id].x;
-    edit.style.height	= row.size.sizes[edit.id].y;
+    editor = CKEDITOR.instances[editid];
+    if (!editor) {
+        editor = CKEDITOR.replace(editid);
+        // console.log("Editor set up on " + editid + "\n");
+        editor.on('change', function() {
+            WysiwygOnChange(editor, editid);
+        });
+        editor.on('blur', function() {
+            row.data[this.field] = edit.value = editor.getData();
+            row.UserUpdate();  // Do I really have to do this? Feels wrong.
+        });
+    }
+    edit.value          = editor.getData();
+    edit.datacol        = this.field;
+    edit.style.width   	= row.size.sizes[editid].x;
+    edit.style.height	= row.size.sizes[editid].y;
     // tinyMCE.execCommand("mceAddControl", true, edit.id);
 }
 
@@ -1057,15 +1076,22 @@ function DataTable_LoadPreferences()
     this.prefs = [{value:retries}];
 }
 
+/* Defunct code since changing to CKEDITOR
+
 DataTable.prototype.LoadWysiwyg = DataTable_LoadWysiwyg;
 function DataTable_LoadWysiwyg(textareaid)
 {
-    if (this.wysiwygloaded)
+    var editor;
+    if (this.editor)
         return;
 
-    this.wysiwygloaded = true;
-    CKEDITOR.replace(textareaid);
-    /*
+    this.editor = CKEDITOR.replace(textareaid);
+    // Handle when the HTML changes.
+    this.editor.on('change', function() {
+        WysiwygOnChange(editor, textareaid);
+    });
+
+
     tinyMCE.init({
         mode : "none",
         theme : "advanced",
@@ -1080,8 +1106,8 @@ function DataTable_LoadWysiwyg(textareaid)
         forced_root_block : '', // Needed for 3.x
         setup : WysiwygSetup
        });
-       */
 }
+*/
 
 DataTable.prototype.Table = DataTable_Table;
 function DataTable_Table(tablename)
@@ -1954,18 +1980,22 @@ function SortByRow(a,b)
     return 0;
 }
 
+/*
+ * Deleted as specific to TinyMCE
 function WysiwygSetup(ed)
 {
     ed.onChange.add(WysiwygOnChange);
 }
+*/
 
-function WysiwygOnChange(ed)
+// Changed for CKEditor use
+function WysiwygOnChange(editor, textAreaId)
 {
-    var row = ObjectFind($(ed.id),'datarow');
-    var col = ObjectFind($(ed.id),'datacol');
+    var row = ObjectFind($(textAreaId),'datarow');
+    var col = ObjectFind($(textAreaId),'datacol');
 
     undo.New("Edit " + col);
-    undo.Set(row,col,ed.getContent());
+    undo.Set(row, col, editor.getData());
 }
 
 function WysiwygFunction(data)

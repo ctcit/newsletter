@@ -7,7 +7,7 @@
             <?php require 'editor.css';?>
             #eventstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
         </style>
-        <script src="https://cdn.ckeditor.com/4.4.7/standard/ckeditor.js"></script>
+        <script src="//cdn.ckeditor.com/4.7.0/basic/ckeditor.js"></script>
         <script> CKEDITOR.env.isCompatible = true;</script>
     </head>
     <body onload="Load()">
@@ -15,22 +15,23 @@
         <?php
         $table      = 'ctcweb9_newsletter.events';
         $type       = $_POST["type"];
-        $date       = $_POST["date"];
+        $date       = GetPost('date');
         $current    = CurrentDates($con);
         $issuedate  = $current["issuedate"];
-        $search     = $_POST["search"];
+        $search     = GetPost('search');
         $searchexpr = "0";
         $where      = "1";
+        $defaults   = '';
 
-        if (preg_match("Social",$type))  $defaults .= ",type:       'Social'";
-        if (preg_match("Social",$type))  $defaults .= ",grade:      'Club Night'";
-        if (preg_match("Weekend",$type)) $defaults .= ",triplength: '2'";
+        if (preg_match("/Social/",$type))  $defaults .= ",type:       'Social'";
+        if (preg_match("/Social/",$type))  $defaults .= ",grade:      'Club Night'";
+        if (preg_match("/Weekend/",$type)) $defaults .= ",triplength: '2'";
 
-        if (preg_match("Social",$type))  $where .= " AND type = 'Social'";
-        if (preg_match("Weekend",$type)) $where .= " AND triplength > 1";
-        if (preg_match("Day",$type))     $where .= " AND triplength <= 1";
-        if (preg_match("Trips",$type))   $where .= " AND type = 'Trip'";
-        if (preg_match("[0-9]",$date))   $where .= " AND date_format(date,'%Y-%m') like '$date%'";
+        if (preg_match("/Social/",$type))  $where .= " AND type = 'Social'";
+        if (preg_match("/Weekend/",$type)) $where .= " AND triplength > 1";
+        if (preg_match("/Day/",$type))     $where .= " AND triplength <= 1";
+        if (preg_match("/Trips/",$type))   $where .= " AND type = 'Trip'";
+        if (preg_match("/[0-9]/",$date))   $where .= " AND date_format(date,'%Y-%m') like '$date%'";
         if ($date == "Current")    $where .= " AND date >= '$issuedate'";
         if ($date == "")           $where .= " AND date >= '$issuedate'";
         if ($search != "")         $searchexpr = "(leader LIKE '%$search%') OR
@@ -96,14 +97,14 @@
                     <?php require 'buttons.inc.php'; ?>
                     Trip/Social:
                     <select name="type" id="type" onchange="Save()">
-                        <?php echo ArrayToOptions($types,$_POST['type'],"All"); ?>
+                        <?php echo ArrayToOptions($types, GetPost('date'), "All"); ?>
                     </select>
                     Date:
                     <select name="date" id="date" onchange="Save()">
-                        <?php echo ArrayToOptions($dates,$_POST['date'],"Current"); ?>
+                        <?php echo ArrayToOptions($dates, GetPost('date'), "Current"); ?>
                     </select>
                     Search:
-                    <input type="text" id="search" name="search" value="<?php echo $_POST['search'];?>"/>
+                    <input type="text" id="search" name="search" value="<?php echo GetPost('search');?>"/>
                     <span id="status"></span>
                 </div>
                 <div id="postdata"><input type="hidden" name="random" value="<?php echo date('Ymd_His');?>"></div>
