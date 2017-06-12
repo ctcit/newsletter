@@ -17,7 +17,7 @@ function Load()
              'root.LoadPreferences()',
              'root.SortRows()',
              'root.DisplayRows(root)',
-			 'root.UpdateCalendar()',
+             'root.UpdateCalendar()',
              'root.UpdateRows(root,0)');
 }
 
@@ -307,6 +307,7 @@ function Row(datatable,data,newid)
     this.found     	= data.found == null ? 0 : Number(data.found);
     this.size		= {sizes:{}, remeasure:true, resize:true};
     this.nodes		= [];
+    this.editor         = null;
 
     for (var i in datatable.children)
         this.nodes[i] = new Node(datatable.children[i],this,this.id + datatable.children[i].id);
@@ -440,6 +441,11 @@ function Row_Selected()
 Row.prototype.Open = Row_Open;
 function Row_Open()
 {
+    if (this.open && this.editor) {
+        // Kill the wysiwyg editor when we close the row
+        this.editor.destroy();
+        this.editor = null;
+    }
     this.open = !this.open;
     $('menu').innerHTML   		= "";
     $('row'+this.id).innerHTML	= this.Html();
@@ -816,16 +822,16 @@ function Column_UpdateTextArea(row, edit)
 {
     var editid = edit.id;
     var editor;
+    var wysiwygReqd = this.Wysiwyg(row.data);
 
     edit.value = row.data[this.field];
 
-    if (!this.Wysiwyg(row.data))
-        return;
-
     editor = CKEDITOR.instances[editid];
-    if (!editor) {
+    if (!editor && wysiwygReqd) {
+        // Turning on wysiwyg
         editor = CKEDITOR.replace(editid);
         // console.log("Editor set up on " + editid + "\n");
+        row.editor = editor;  // So we can destroy it when row closes
         editor.on('change', function() {
             WysiwygOnChange(editor, editid);
         });
@@ -833,11 +839,17 @@ function Column_UpdateTextArea(row, edit)
             row.data[this.field] = edit.value = editor.getData();
             row.UserUpdate();  // Do I really have to do this? Feels wrong.
         });
+    } else if (editor && !wysiwygReqd) {
+        // Turning off wysiwyg
+        editor.destroy();
     }
-    edit.value          = editor.getData();
-    edit.datacol        = this.field;
-    edit.style.width   	= row.size.sizes[editid].x;
-    edit.style.height	= row.size.sizes[editid].y;
+
+    if (wysiwygReqd) {
+        edit.value          = editor.getData();
+        edit.datacol        = this.field;
+        edit.style.width   	= row.size.sizes[editid].x;
+        edit.style.height	= row.size.sizes[editid].y;
+    }
     // tinyMCE.execCommand("mceAddControl", true, edit.id);
 }
 
