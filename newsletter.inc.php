@@ -161,7 +161,7 @@ function JsonFromRow($queryrow)
     $js  = "";
     foreach ($queryrow as $col => $val)
     {
-        if (preg_match("[a-zA-Z]",$col))
+        if (preg_match("/[a-zA-Z]/",$col))
             $js .= JsonFromString(strtolower($col)).':'.JsonFromString($val).',';
     }
 
