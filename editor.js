@@ -823,13 +823,19 @@ function Column_UpdateTextArea(row, edit)
     var editid = edit.id;
     var editor;
     var wysiwygReqd = this.Wysiwyg(row.data);
+    var config = {toolbar : [
+            {name: 'Clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord']},
+            {name: 'UndoRedo', items: ['Undo', 'Redo']},
+            {name: 'Tools', items: ['Maximise']},
+            {name: 'Styles', items: ['Bold', 'Italic']}
+        ]};
 
     edit.value = row.data[this.field];
 
     editor = CKEDITOR.instances[editid];
     if (!editor && wysiwygReqd) {
         // Turning on wysiwyg
-        editor = CKEDITOR.replace(editid);
+        editor = CKEDITOR.replace(editid, config);
         // console.log("Editor set up on " + editid + "\n");
         row.editor = editor;  // So we can destroy it when row closes
         editor.on('change', function() {

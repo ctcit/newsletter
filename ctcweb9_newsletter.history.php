@@ -9,7 +9,7 @@
 			.before { color: darkred;}
 			.after  { color: green;}
 		</style>
-        <script src="//cdn.ckeditor.com/4.7.0/basic/ckeditor.js"></script>
+        <script src="//cdn.ckeditor.com/4.7.0/standard/ckeditor.js"></script>
         <script> CKEDITOR.env.isCompatible = true;</script>
 	</head>
 	<body onload="Load();LoadTableData();">
