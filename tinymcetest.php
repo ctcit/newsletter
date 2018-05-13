@@ -1,6 +1,11 @@
-		<script type="text/javascript" src="http://www.ctc.org.nz/mambots/editors/tinymce/jscripts/tiny_mce/tiny_mce_src.js"></script>	
+		<script type="text/javascript" src="../media/editors/tinymce/tinymce.min.js"></script>	
 	<script type="text/javascript">
-	tinyMCE.init({	mode : "specific_textareas",
-					editor_selector: "tinyMCEtextarea"});
+	tinymce.init({	mode : "specific_textareas",
+					selector: "#tinyMCEtextarea1"});
 					</script>
-					<textarea class="tinyMCEtextarea">The text <b>in bold</b>.<textarea>
+					<textarea id="tinyMCEtextarea1">The text <b>in bold</b>.</textarea>
+	<script type="text/javascript">
+	tinymce.init({	mode : "specific_textareas",
+					selector: "#tinyMCEtextarea2"});
+					</script>
+                    <textarea id="tinyMCEtextarea2">Another area</textarea>

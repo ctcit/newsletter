@@ -641,7 +641,7 @@ function Row_UserUpdate(col,value)
     {
         this.Make();
 
-        if (rowshow != this.Show())
+        if (rowshow != this.Show() && col != "wysiwyg")
         {
             this.size.remeasure = true;
             $('row'+this.id).innerHTML  = this.Html();
@@ -806,27 +806,55 @@ function Column_UpdateInput(row,edit)
 {
     edit.value = row.data[this.field];
 }
-
+/*
+    tinymce.execCommand('mceFocus', true, textArea_id );       
+    tinymce.execCommand('mceRemoveEditor',true, textArea_id);        
+    tinymce.execCommand('mceAddEditor',true, textArea_id);
+*/
 Column.prototype.UpdateTextArea = Column_UpdateTextArea;
 function Column_UpdateTextArea(row,edit)
 {
     edit.value = row.data[this.field];
-
-    if (!this.Wysiwyg(row.data))
+    var ed =  tinymce.EditorManager.editors[edit.id];
+    //alert('Column_UpdateTextArea');
+    if (!this.Wysiwyg(row.data)){
+        //alert('mceRemoveEditor');
+        if (ed)
+          tinymce.remove(ed);
+          //tinymce.EditorManager.execCommand('mceRemoveEditor', true, edit.id);
         return;
+    }
 
-    root.LoadWysiwyg();
-    edit.datacol		= this.field;
-    edit.style.width   	= row.size.sizes[edit.id].x;
-    edit.style.height	= row.size.sizes[edit.id].y;
+    // We want wysiwg
+    if (!ed){
+      //alert('createEditor ' + edit.id);
         ed = tinymce.createEditor(edit.id, {
           mode: "specific_textareas",
           selector: "#" + edit.id,
            setup : WysiwygSetup
         });
+
+        edit.datacol = this.field;
+        edit.style.width = row.size.sizes[edit.id].x;
+        edit.style.height = row.size.sizes[edit.id].y;
+        //alert('rendering ' + edit.id);
+        //tinymce.execCommand('mceFocus', true, edit.id);
         ed.render();
-    //tinyMCE.execCommand("mceAddEditor", true, edit.id);
-}
+    }
+};
+
+    // Control gets here but does the command work?
+    //if (tinymce.EditorManager.queryCommandSupported('mceAddEditor')){
+    //var b = tinymce.EditorManager.execCommand('mceAddEditor', true, edit.id);
+    //}else
+    //    alert('mceAddEditor' + ' not supported');
+    //When you want to turn it of, you can use
+    //tinymce.EditorManager.execCommand('mceRemoveEditor', false, "content_txt");
+
+    //tinymce.execCommand("mceAddControl", true, edit.id);
+    //tinyMCE.editors[id].show();
+    //tinyMCE.editors[id].hide();
+
 
 Column.prototype.UpdateCheckbox = Column_UpdateCheckbox;
 function Column_UpdateCheckbox(row,edit)
@@ -1070,11 +1098,38 @@ function DataTable_LoadWysiwyg()
         return;
 
     this.wysiwygloaded = true;
+    //tinymce.init({	mode : "specific_textareas",
+//			editor_selector: "textarea"});
+   // alert('tinymce.init');
     /*
-    tinyMCE.init({
+    tinymce.init({
+        selector: 'textarea',
+        height: 500,
+        theme: 'modern',
+        plugins: [
+          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen',
+          'insertdatetime media nonbreaking save table contextmenu directionality',
+          'emoticons template paste textcolor colorpicker textpattern imagetools'
+        ],
+        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        toolbar2: 'print preview media | forecolor backcolor emoticons',
+        image_advtab: true,
+        templates: [
+          { title: 'Test template 1', content: 'Test 1' },
+          { title: 'Test template 2', content: 'Test 2' }
+        ],
+        content_css: [
+          '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+          '//www.tinymce.com/css/codepen.min.css'
+        ],
+        setup : WysiwygSetup
+      });
+    /*  
+    tinyce.init({
         mode : "none",
-        theme : "modern",
-        plugins : ["table,contextmenu"],
+        theme : "advanced",
+        plugins : "table,contextmenu",
         theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,tablecontrols,bullist,numlist,|,indent,outdent,|,link,unlink,|,formatselect,fontselect,fontsizeselect",
         theme_advanced_buttons2 : "",
         theme_advanced_buttons3 : "",
@@ -1961,12 +2016,15 @@ function SortByRow(a,b)
 
 function WysiwygSetup(ed)
 {
+    // This never gets called
+    //alert('wysiwyg setup');
     ed.on('Change', WysiwygOnChange);
-    //ed.onChange.add(WysiwygOnChange);
 }
 
 function WysiwygOnChange(ed)
 {
+    // This never gets called
+    alert('WysiwygOnChange');
     var row = ObjectFind($(ed.id),'datarow');
     var col = ObjectFind($(ed.id),'datacol');
     
@@ -1976,5 +2034,6 @@ function WysiwygOnChange(ed)
 
 function WysiwygFunction(data)
 {
+    // This gets called ok
     return data.wysiwyg == '1';
 }

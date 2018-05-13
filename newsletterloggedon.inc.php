@@ -7,7 +7,9 @@ if (count($processor->userpositions) == 0)
 	die('Not logged on');
 }
 
-$prefs	  	= 	"{ value:'GenerateFile(\"$_POST[generatefile]\")'},".
+$generatefile = isset($_POST["generatefile"]) ? $_POST["generatefile"]: "";
+
+$prefs	  	= 	"{ value:'GenerateFile(\"".$generatefile."\")'},".
 				JsonFromQuery($con,"SELECT value from ctcweb9_newsletter.fields 
 										WHERE `name`='$username.$_SERVER[REQUEST_URI]'",false,true);
 

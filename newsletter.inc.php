@@ -161,7 +161,7 @@ function JsonFromRow($queryrow)
     $js  = "";
     foreach ($queryrow as $col => $val)
     {
-        if (ereg("[a-zA-Z]",$col))
+        if (preg_match('/[a-zA-Z]/',$col))
             $js .= JsonFromString(strtolower($col)).':'.JsonFromString($val).',';
     }
     
@@ -326,7 +326,7 @@ class PostProcessor
 	    foreach ($post as $name => $valueRaw)
 	    {
 	    	$value = addslashes($valueRaw);
-			$regs = split(",",$name);
+			$regs = explode(",",$name);
 		
 			switch ($regs[0])
 			{
@@ -394,7 +394,8 @@ class PostProcessor
 
 	    foreach ($rows as $row)
 	    {
-	        $sql = "$row[action] $row[table] $row[set] $row[where]";
+            $where = isset($row['where']) ? $row['where']: "";
+	        $sql = "$row[action] $row[table] $row[set] $where";
 	        if (!$this->con->query($sql))
 			{
 	            $this->errors .= "$sql\n".$this->con->error."<br/>\n";
@@ -430,7 +431,7 @@ class PostProcessor
 
 	function ProcessUpload($files)
 	{
-		if (count($this->userpositions) == 0 || $files['upload']['name'] == "")
+		if (count($this->userpositions) == 0 || !isset($files['upload']) || $files['upload']['name'] == "")
 			return "";
 
 		$name			= $files['upload']['name'];
