@@ -508,7 +508,7 @@ $app = JFactory::getApplication('site');
 $user = JFactory::getUser();
 $config = new JConfig();
 define('BASE_URL', $config->live_site);
-$con    = mysqli_connect("localhost",  $config->user, $config->password);
+$con    = mysqli_connect($config->host,  $config->user, $config->password);
 if (!$con)
     die('mysqli_connect failed');
 $username	= $user->username;
