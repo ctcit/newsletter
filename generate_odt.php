@@ -158,7 +158,7 @@ class XmlTemplateEngine {
 
     // Called with text from a text node as a parameter.
     // Returns a list of new nodes to replace that original text node, by
-    // expanding any embedded HTML styles (<strong>, <em> etc) into 
+    // expanding any embedded HTML styles (<strong>, <em> etc) into
     // text:span nodes.
     function getTextSpans($text, $replacement) {
 
@@ -189,7 +189,7 @@ class XmlTemplateEngine {
     // The replacement rule is given as a 2-element array containing
     // the replacement pattern and the text:span style name to use
     // for the matching text.
-    // 
+    //
     function processStyle($parent, $replacement) {
         if ($parent->hasChildNodes()) {
             $newChildren = array();
@@ -288,7 +288,7 @@ class XmlTemplateEngine {
     // RJL: Modified 7/3/11 to attempt an expansion of more complex structures.
     // Algorithm preserves the existing children of the given text:p node
     // until a descendent with embedded HTML paragraph breaks is encountered.
-    // From the first such break onwards, all new paragraphs are attached to 
+    // From the first such break onwards, all new paragraphs are attached to
     // a clone of the original text:p node. This isn't totally correct
     // but then "totally correct" isn't well defined here!
 
@@ -341,7 +341,7 @@ class XmlTemplateEngine {
     // Return a pair (2-element array) containing the index to the first node in
     // the given list of nodes that is a text node containing the given string
     // together with the associated argument of the given string (which must be
-    // a template command. For example if the 3rd text node is "{{Blah thing}}", 
+    // a template command. For example if the 3rd text node is "{{Blah thing}}",
     // where $s is "Blah" the function returns (3, "thing").
     // Backwards is true to search backwards through the list.
     function findNodeContaining($s, $nodeList, $backwards = False) {
@@ -645,13 +645,13 @@ class XmlTemplateEngine {
         $s = xmlTemplateEngine::fixMicrosoft($s);
         $s = str_replace(array("\n", "\r"), array(" ", ""), trim($s));
         $cleaned = htmlspecialchars(utf8_encode($s), ENT_QUOTES, "UTF-8", False);
-        
+
         // Now convert a known set of HTML Entities to UTF-8, but leaving &lt; and &gt;
         // alone, as they're used for structure elements like <p> tags.
         // [Which is why I can't just call html_entity_decode].
-        
+
         $cleaned = XmlTemplateEngine::htmlEntities2utf8($cleaned);
-        
+
         $junkToRemove = array(
             "|&lt;!--[if.*&lt;![endif]--&gt;|Us",
             "|&lt;/?span.*&gt;|Us",
@@ -663,8 +663,8 @@ class XmlTemplateEngine {
         }
         return $cleaned;
     }
-    
-    
+
+
     static function htmlEntities2utf8($s) {
         // Replace various common html entities with UTF-8, leaving &lt; and &gt;
         // unchanged, as they're used for HTML structure, still to be processed.
@@ -672,7 +672,7 @@ class XmlTemplateEngine {
         $s = str_replace(array('&#039;', '&#39;'), array('&rsquo;', '&rsquo;'), $s);
         $s = html_entity_decode($s, ENT_COMPAT, 'UTF-8');
         $s = str_replace(array('&__lt;', '&__gt;'), array('&lt;', '&gt;'), $s);
-        return $s; 
+        return $s;
     }
 
     // Perform all the necessary transformations on a text node
@@ -723,9 +723,9 @@ class XmlTemplateEngine {
     }
 
     function expandTemplate($template) {
-        $this->dom = DOMDocument::loadXML($template);
+        $this->dom = new DOMDocument();
+        $this->dom->loadXML($template);
         $newDom = $this->processNode($this->dom, array());
-        //echo "Filtering";
         $newDom = $this->filterHTML($newDom);
         $newDom = $this->processStyles($newDom);
         $xml = $newDom->saveXML();
@@ -733,12 +733,12 @@ class XmlTemplateEngine {
     }
 
     function processOdtTemplate($template) {
-        $zipFile = fopen("zipFile.odt", "w");
+        $zipFile = fopen("/tmp/zipFile.odt", "w");
         fwrite($zipFile, $template, strlen($template));
         fclose($zipFile);
 
         $zip = new ZipArchive();
-        if ($zip->open('zipFile.odt') !== TRUE) {
+        if ($zip->open('/tmp/zipFile.odt') !== TRUE) {
             throw new Exception("Template isn't a .odt file");
         }
 
@@ -752,7 +752,7 @@ class XmlTemplateEngine {
         $zip->addFromString('content.xml', $expanded);
         $zip->close();
 
-        $newData = file_get_contents("zipFile.odt");
+        $newData = file_get_contents("/tmp/zipFile.odt");
 
         return $newData;
     }
