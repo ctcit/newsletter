@@ -9,7 +9,7 @@
 			.before { color: darkred;}
 			.after  { color: green;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript" src="../media/editors/tinymce/tinymce.min.js"></script>
 	</head>
 	<body onload="Load();LoadTableData();">
 	<script>

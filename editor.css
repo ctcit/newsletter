@@ -53,12 +53,12 @@
 	color:			red;
 	font-weight:	bold;
 }
-
+/*
 .menuitem
 {
 	border:			solid 1px black;
 }
-
+*/
 .tool, .toolselected
 {
 	padding:				1px 1px 1px 1px;

@@ -7,7 +7,7 @@
 			<?php require 'editor.css';?>
 			#documentstab { border: solid 2px black; border-bottom: solid 2px white; background: none;}
 		</style>
-		<script type="text/javascript" src="/mambots/editors/tinymce3.0.3/jscripts/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript" src="../media/editors/tinymce/tinymce.min.js"></script>
 	</head>
 	<body onload="Load()">
 		<script>

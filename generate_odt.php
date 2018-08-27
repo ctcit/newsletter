@@ -733,12 +733,13 @@ class XmlTemplateEngine {
     }
 
     function processOdtTemplate($template) {
-        $zipFile = fopen("/tmp/zipFile.odt", "w");
+        $zipPath = sys_get_temp_dir ()."/zipFile.odt";
+        $zipFile = fopen($zipPath, "w");
         fwrite($zipFile, $template, strlen($template));
         fclose($zipFile);
 
         $zip = new ZipArchive();
-        if ($zip->open('/tmp/zipFile.odt') !== TRUE) {
+        if ($zip->open($zipPath) !== TRUE) {
             throw new Exception("Template isn't a .odt file");
         }
 
@@ -752,7 +753,7 @@ class XmlTemplateEngine {
         $zip->addFromString('content.xml', $expanded);
         $zip->close();
 
-        $newData = file_get_contents("/tmp/zipFile.odt");
+        $newData = file_get_contents($zipPath);
 
         return $newData;
     }

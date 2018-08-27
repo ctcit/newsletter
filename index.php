@@ -40,7 +40,7 @@
 		foreach ($processor->userpositions as $pos => $name)
 		    echo "<li>You are logged in as $name and your position is $pos</li>";
 
-		if ($_GET['resetuserpreferences'] == '1')
+		if (isset($_GET['resetuserpreferences']) && $_GET['resetuserpreferences'] == '1')
 		{
 			$con->query("delete from newsletter.fields
 						where `name` like '$processor->username.%'
