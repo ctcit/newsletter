@@ -32,10 +32,10 @@ $text   	= ValueFromSql($con,"SELECT concat(`introtext`,`fulltext`) 'text'
 								FROM jos_content 
 								WHERE id=$id");
 $rtfpagewidth = ValueFromSql($con,"SELECT value 
-								FROM ctcweb9_newsletter.fields
+								FROM newsletter.fields
 								WHERE name='rtfpagewidth'");
 $rtfincolour = ValueFromSql($con,"SELECT value 
-								FROM ctcweb9_newsletter.fields
+								FROM newsletter.fields
 								WHERE name='rtfincolour'") == '1';
 $size 		= floatval($size) * floatval($rtfpagewidth);
 

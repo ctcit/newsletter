@@ -16,17 +16,17 @@
 
 		$date        = $_POST["date"];
 
-		if (!$con->query("UPDATE ctcweb9_newsletter.fields SET `order` = id WHERE `order` < 0"))
+		if (!$con->query("UPDATE newsletter.fields SET `order` = id WHERE `order` < 0"))
 			die($con->error);
 
-		$table 		= 'ctcweb9_newsletter.fields';
-		$tableroot	= 'ctcweb9_newsletter.fieldsGrouped';
+		$table 		= 'newsletter.fields';
+		$tableroot	= 'newsletter.fieldsGrouped';
 		$groupcols	= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table LIKE 'id'").','.
 					  JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table LIKE 'type'");
 		$grouprows	= JsonFromQuery($con,"SELECT min(id) id, `type` ".
 										 "FROM $table GROUP BY `type`");
 		$cols 		= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
-		$positions  = "SELECT DISTINCT con_position name FROM ctcweb9_joom1.jos_contact_details";
+		$positions  = "SELECT DISTINCT con_position name FROM joom1.jos_contact_details";
 		$columns   	= "SELECT DISTINCT `column`     name FROM $table";
 		$types   	= "SELECT DISTINCT `type`       name FROM $table";
 

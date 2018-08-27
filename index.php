@@ -25,7 +25,7 @@
         <li><a class="link" href="../scripts/processNewsletterEvents.php" onclick="return confirm('Rewrite trip list and social events to website. Are you sure?')" target="_blank">Publish trips and social events to web site</a></li>
         <li><a class="link" href="../tripsignup/api/AddTripsFromNewsletter.php" onclick="return confirm('Update trip signup system. Are you sure?')" target="_blank">Update trip signup system</a></li>
 		<?php
-		$rows = $con->query("select 'All' section UNION select distinct section from ctcweb9_newsletter.notices");
+		$rows = $con->query("select 'All' section UNION select distinct section from newsletter.notices");
 
 		while ($row = mysqli_fetch_array($rows))
 		{
@@ -42,7 +42,7 @@
 
 		if ($_GET['resetuserpreferences'] == '1')
 		{
-			$con->query("delete from ctcweb9_newsletter.fields
+			$con->query("delete from newsletter.fields
 						where `name` like '$processor->username.%'
 						and `type` = 'User Preference'");
 		}
@@ -116,13 +116,13 @@
 		<script>
 		function Submit(table,name,value)
 		{
-			document.getElementById('submitform').action	= "ctcweb9_newsletter."+table+".php";
+			document.getElementById('submitform').action	= "newsletter."+table+".php";
 			document.getElementById('submitfield').value	= value;
 			document.getElementById('submitfield').name		= name;
 			document.getElementById('submitform').submit();
 		}
 		</script>
-		<form name="events" action="ctcweb9_newsletter.events.php" method="post" id="submitform">
+		<form name="events" action="newsletter.events.php" method="post" id="submitform">
 			<input type="hidden" name="type" value="" id="submitfield" />
 		</form>
 	</body>

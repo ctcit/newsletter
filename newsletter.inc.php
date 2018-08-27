@@ -246,14 +246,14 @@ function ValueFromSql($con,$query)
 
 function SetField($con,$name,$value,$type)
 {
-	$con->query("INSERT INTO ctcweb9_newsletter.fields(`name`,`value`,`type`)
+	$con->query("INSERT INTO newsletter.fields(`name`,`value`,`type`)
 												VALUES('$name','$value','$type')
 				ON DUPLICATE KEY UPDATE `value`='$value'");
 }
 
 function ProcessFields($con)
 {
-    $queryrows = $con->query("SELECT * FROM ctcweb9_newsletter.`fields`");
+    $queryrows = $con->query("SELECT * FROM newsletter.`fields`");
 	$out = array();
 
     if (!$queryrows)
@@ -280,7 +280,7 @@ function ProcessFields($con)
 		$out[strtolower($row["name"])] = array( "value" => $value, "sql" => $sql );
 
 		if ($value != $row["value"] &&
-			!$con->query("update ctcweb9_newsletter.`fields`
+			!$con->query("update newsletter.`fields`
 							set value='".addslashes($value)."' where id = $id"))
 			die($con->error);
     }
@@ -290,8 +290,8 @@ function ProcessFields($con)
 
 class PostProcessor
 {
-    var $historyitem   		= 'ctcweb9_newsletter.historyitem';
-	var $historydetail 		= 'ctcweb9_newsletter.historydetail';
+    var $historyitem   		= 'newsletter.historyitem';
+	var $historydetail 		= 'newsletter.historydetail';
     var $errors 			= '';
     var $datetime			= '';
 	var $con;
@@ -305,7 +305,7 @@ class PostProcessor
 		$this->username 		= $username;
         $this->userpositions = ArrayFromQuery($con,
             "SELECT role, fullName
-             FROM ctcweb9_ctc.view_members, ctcweb9_ctc.members_roles, ctcweb9_ctc.roles
+             FROM ctc.view_members, ctc.members_roles, ctc.roles
              WHERE loginName='$username'
              AND members_roles.memberId = view_members.memberId
              AND members_roles.roleId = roles.id");
@@ -437,9 +437,9 @@ class PostProcessor
 		$tmp			= $files['upload']['tmp_name'];
 		$name			= str_replace(" ","",$name);
 		$ext			= str_replace(".","",strtolower(substr($name,strrpos($name,"."))));
-		$table			= 'ctcweb9_newsletter.documents';
+		$table			= 'newsletter.documents';
 		$exts			= ValueFromSql($this->con, "SELECT `value`
-											FROM ctcweb9_newsletter.fields
+											FROM newsletter.fields
 											WHERE name = 'acceptabledocumenttypes'");
 
 		if ($exts == "" || strpos(",$exts,",",$ext,") === FALSE)
@@ -483,10 +483,10 @@ class PostProcessor
 	}
 }
 
-// Returns relevant information from the ctcweb9_newsletter.newsletter table
+// Returns relevant information from the newsletter.newsletter table
 function CurrentDates($con)
 {
-    $current = $con->query("SELECT * FROM ctcweb9_newsletter.newsletters WHERE IsCurrent");
+    $current = $con->query("SELECT * FROM newsletter.newsletters WHERE IsCurrent");
 
     if ($row = mysqli_fetch_array($current))
         return array("date"         => $row["date"],

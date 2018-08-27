@@ -12,7 +12,7 @@
 	<body onload=Load()>
 		<script>
 		<?php
-		$table 		= 'ctcweb9_newsletter.newsletters';
+		$table 		= 'newsletter.newsletters';
 		$cols 		= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
 		$rows 		= JsonFromQuery($con,"SELECT * FROM $table");
 

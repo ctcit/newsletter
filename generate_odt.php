@@ -761,9 +761,9 @@ class XmlTemplateEngine {
 
 // "main body" is just debugging
 if ($DEBUGGING) {
-    $db = mysqli_connect("localhost", 'ctcweb9_ctcadmin', 'murgatr0ad');
+    $db = mysqli_connect("localhost", 'ctcadmin', 'murgatr0ad');
     $db || die('Could not connect to database');
-    $db->select_db('ctcweb9_newsletter') || die('Could not open database');
+    $db->select_db('newsletter') || die('Could not open database');
     $filename = "newsletterTemplate.odt";
     $template = file_get_contents($filename);
     $engine = new XmlTemplateEngine($db);

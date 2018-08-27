@@ -12,7 +12,7 @@
     <body onload="Load()">
         <script>
         <?php
-        $table      = 'ctcweb9_newsletter.events';
+        $table      = 'newsletter.events';
         $type       = $_POST["type"];
         $date       = $_POST["date"];
         $current    = CurrentDates($con);
@@ -55,7 +55,7 @@
                         "       name in ( SELECT map1 FROM $table UNION ".
                         "                 SELECT map2 FROM $table UNION ".
                         "                 SELECT map3 FROM $table       ) common ".
-                        "  FROM   ctcweb9_newsletter.maps ".
+                        "  FROM   newsletter.maps ".
                         "  ORDER BY name";
         $leaders     =  "SELECT fullName AS name,
                         primaryEmail AS email,
@@ -63,7 +63,7 @@
                         concat( fullName,' ',homePhone,' ',primaryEmail,' ') as title,
                         fullName in
                             (select leader from $table) as common
-                        FROM ctcweb9_ctc.view_members
+                        FROM ctc.view_members
                         WHERE status = 'Active'
                         ORDER BY name";
         $eventtypes  = "select 'Social' name union select 'Trip' name";

@@ -418,7 +418,7 @@ class RtfGenerator
 }
 
 $generator   = new RtfGenerator($con);
-$db          = (!isset($_GET['db'])    || $_GET['db']    == '') ? 'ctcweb9_newsletter': $_GET['db'];
+$db          = (!isset($_GET['db'])    || $_GET['db']    == '') ? 'newsletter': $_GET['db'];
 $table       = (!isset($_GET['table']) || $_GET['table'] == '') ? 'documents'         : $_GET['table'];
 $col         = (!isset($_GET['col'])   || $_GET['col']   == '') ? 'data'              : $_GET['col'];
 //$random        = $_GET['random']  == '' ? date('Ymd_His')      : $_GET['random'];

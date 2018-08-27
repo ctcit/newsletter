@@ -12,8 +12,8 @@
 	<body onload="Load()">
 		<script>
 			<?php
-			$table	  = "ctcweb9_newsletter.documents";
-			$settings = JsonFromQuery($con,"SELECT name, value FROM ctcweb9_newsletter.fields WHERE `type` = 'setting'");
+			$table	  = "newsletter.documents";
+			$settings = JsonFromQuery($con,"SELECT name, value FROM newsletter.fields WHERE `type` = 'setting'");
 			$cols     = JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
 			$rows     = JsonFromQuery($con,"SELECT id, name, size, uploaded,
 										concat('<a href=generate.php?name=', name, '>download</a> ',

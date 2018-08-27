@@ -13,7 +13,7 @@
 		<script>
 		<?php
 
-		$table		= "ctcweb9_newsletter.reports";
+		$table		= "newsletter.reports";
 		$where      = "1";
 		$date       = $_POST["date"];
 		$current    = CurrentDates($con);
@@ -35,9 +35,9 @@
 					"			 ' (', jos_content.id, ')') `name`, ".
 					"	  jos_content.title                 `title`, ".
 					"	  NOT (jos_content.id IN (SELECT reportid FROM $table)) `common` ".
-					"  FROM ctcweb9_joom1.jos_content,  ".
-					"	ctcweb9_joom1.jos_sections,  ".
-					"	ctcweb9_joom1.jos_categories ".
+					"  FROM joom1.jos_content,  ".
+					"	joom1.jos_sections,  ".
+					"	joom1.jos_categories ".
 					"  WHERE jos_categories.name = 'Aunty Iceaxe' ".
 					"  AND   jos_sections.id = jos_content.sectionid ".
 					"  AND   jos_categories.id = jos_content.catid ".
@@ -51,7 +51,7 @@
 					"     tripreport.date_display as `date`, ".
 					"     tripreport.year = '$year' AND ".
 					"	  NOT (tripreport.id IN (SELECT reportid FROM $table)) `common` ".
-					" from ctcweb9_tripreports.tripreport";
+					" from tripreports.tripreport";
 		
 		// TODO reimplement Aunty Iceaxe report inclusion
 		// TODO disambiguate Aunty Iceaxe reports from Trip Reports (?)
@@ -65,7 +65,7 @@
 
 		// TODO reimplement image handling
 		
-		$settings = JsonFromQuery($con,"SELECT name, value FROM ctcweb9_newsletter.fields WHERE `type`='setting'");
+		$settings = JsonFromQuery($con,"SELECT name, value FROM newsletter.fields WHERE `type`='setting'");
 
 		?>
 

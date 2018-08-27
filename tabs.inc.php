@@ -9,36 +9,36 @@
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="eventstab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.events.php')" value="Events" class="tabbutton" title="Go to the Events tab"/>
+			<input type="button" onclick="Save('newsletter.events.php')" value="Events" class="tabbutton" title="Go to the Events tab"/>
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="noticestab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.notices.php')" value="Notices" class="tabbutton" title="Go to the Notices tab"/>
+			<input type="button" onclick="Save('newsletter.notices.php')" value="Notices" class="tabbutton" title="Go to the Notices tab"/>
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="reportstab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.reports.php')" value="Reports" class="tabbutton" title="Go to the Reports tab"/>
+			<input type="button" onclick="Save('newsletter.reports.php')" value="Reports" class="tabbutton" title="Go to the Reports tab"/>
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="fieldstab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.fields.php')" value="Fields" class="tabbutton" title="Go to the Fields tab"/>
+			<input type="button" onclick="Save('newsletter.fields.php')" value="Fields" class="tabbutton" title="Go to the Fields tab"/>
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="documentstab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.documents.php')" value="Documents" class="tabbutton" title="Go to the Documents tab"/>
+			<input type="button" onclick="Save('newsletter.documents.php')" value="Documents" class="tabbutton" title="Go to the Documents tab"/>
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="newsletterstab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.newsletters.php')" value="Newsletters" class="tabbutton" title="Go to the Newsletters tab"/>
+			<input type="button" onclick="Save('newsletter.newsletters.php')" value="Newsletters" class="tabbutton" title="Go to the Newsletters tab"/>
 		</td>
 		<td class="tabgap">&nbsp;</td>
 		<td class="tabcell" id="historytab">
-			<input type="button" onclick="Save('ctcweb9_newsletter.history.php')" value="History" class="tabbutton" title="Go to the History tab"/>
+			<input type="button" onclick="Save('newsletter.history.php')" value="History" class="tabbutton" title="Go to the History tab"/>
 		</td>
 		<td style="width:100%; text-align:right" class="tabgap">
 		Generate:
 		<?php
-		$docrows = $con->query("select replace(name,'.odt','') name from ctcweb9_newsletter.documents 
+		$docrows = $con->query("select replace(name,'.odt','') name from newsletter.documents 
 							 where name like '%.odt' and name not like '%merge%'");
 		$docdate = date('Ymd_Hms');
 

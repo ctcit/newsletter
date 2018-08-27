@@ -14,8 +14,8 @@
 	<body onload="Load();LoadTableData();">
 	<script>
 		<?php
-		$table 			= 'ctcweb9_newsletter.historyitem';
-		$detail 		= 'ctcweb9_newsletter.historydetail';
+		$table 			= 'newsletter.historyitem';
+		$detail 		= 'newsletter.historydetail';
 		$tablecols		= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
 		$detailcols		= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $detail");
 		$where 		 	= "1=1";
@@ -25,19 +25,19 @@
 		$filterlimit	= $_POST["filterlimit"];
 		$filterids		= trim($filterids,',');
 		$filtertables	= array("All"								=>"Select history for all tables",
-								"ctcweb9_newsletter.events"			=>"Select history for this table",
-								"ctcweb9_newsletter.notices"		=>"Select history for this table",
-								"ctcweb9_newsletter.reports"		=>"Select history for this table",
-								"ctcweb9_newsletter.fields"			=>"Select history for this table",
-								"ctcweb9_newsletter.newsletters"	=>"Select history for this table");
+								"newsletter.events"			=>"Select history for this table",
+								"newsletter.notices"		=>"Select history for this table",
+								"newsletter.reports"		=>"Select history for this table",
+								"newsletter.fields"			=>"Select history for this table",
+								"newsletter.newsletters"	=>"Select history for this table");
 		$filterdates	= array("All"								=>"Select history for all dates",
 								"Current"							=>"Select history for the current newsletter");
 		$filterdates	+= ArrayFromQuery($con,"SELECT	distinct date_format(datetime,'%Y-%m')	value, 
 														'Select history for this month' 		title
 												FROM   $table");
 		$startdate 		= ValueFromSql($con,"SELECT max(DATE_ADD(prev.issuedate,INTERVAL 1 DAY)) 
-											 FROM   ctcweb9_newsletter.newsletters prev,
-													ctcweb9_newsletter.newsletters curr
+											 FROM   newsletter.newsletters prev,
+													newsletter.newsletters curr
 											 WHERE  prev.issuedate < curr.issuedate AND curr.iscurrent");
 
 		if (!array_key_exists($filtertable,$filtertables))

@@ -12,8 +12,8 @@
 	<body onload=Load()>
 		<script>
 		<?php
-		$tableroot	 = 'ctcweb9_newsletter.noticesGrouped';
-		$table		 = 'ctcweb9_newsletter.notices';
+		$tableroot	 = 'newsletter.noticesGrouped';
+		$table		 = 'newsletter.notices';
 		$section     = $_POST["section"];
 		$date        = $_POST["date"];
 		$current     = CurrentDates($con);
@@ -64,10 +64,10 @@
 			$grouprows	= JsonFromQuery($con,"SELECT min(id) id, section, SUM($searchexpr) found ".
 											 "FROM $table WHERE $sectionexpr GROUP BY section");
 			$cols 		= JsonFromQuery($con,"SHOW FULL COLUMNS FROM $table");
-			$settings	= JsonFromQuery($con,"SELECT name, value FROM ctcweb9_newsletter.fields WHERE `type` = 'setting'");
+			$settings	= JsonFromQuery($con,"SELECT name, value FROM newsletter.fields WHERE `type` = 'setting'");
 			$types      = "SELECT DISTINCT type    name FROM $table";
 			$sections   = "SELECT DISTINCT section name FROM $table";
-			$documents  = "SELECT name FROM ctcweb9_newsletter.documents";
+			$documents  = "SELECT name FROM newsletter.documents";
 
 	        echo 
 	            "
