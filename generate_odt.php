@@ -51,7 +51,7 @@ class XmlTemplateEngine {
      * if a foreach command is encountered without a query argument.
      */
     function __construct($db, $tableRows = null) {
-        $db->set_charset("utf8");
+        // $db->set_charset("utf8");
         $this->db = $db;
         $this->level = 0;
         $this->reserved = array("foreach", "if", "endif", "endforeach");
@@ -765,7 +765,7 @@ class XmlTemplateEngine {
 if ($DEBUGGING) {
     $db = mysqli_connect("localhost", 'ctcweb9_ctcadmin', 'murgatr0ad');
     $db || die('Could not connect to database');
-    $db->set_charset("utf8");
+    // $db->set_charset("utf8");
     $db->select_db('ctcweb9_newsletter') || die('Could not open database');
     $filename = "newsletterTemplate.odt";
     $template = file_get_contents($filename);
