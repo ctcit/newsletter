@@ -440,11 +440,7 @@ class PostProcessor
 		$ext			= str_replace(".","",strtolower(substr($name,strrpos($name,"."))));
 		$table			= 'newsletter.documents';
 		$exts			= ValueFromSql($this->con, "SELECT `value`
-<<<<<<< HEAD
 											FROM newsletter.fields
-=======
-											FROM ctcweb9_newsletter.fields 
->>>>>>> master
 											WHERE name = 'acceptabledocumenttypes'");
 									 
 		if ($exts == "" || strpos(",$exts,",",$ext,") === FALSE)
@@ -516,6 +512,7 @@ define('BASE_URL', $config->live_site);
 $con    = mysqli_connect($config->host,  $config->user, $config->password);
 if (!$con)
     die('mysqli_connect failed');
+$con->set_charset('utf8mb4');
 $username	= $user->username;
 
 $processor = new PostProcessor($con,$username);

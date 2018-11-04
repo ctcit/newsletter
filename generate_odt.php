@@ -51,6 +51,7 @@ class XmlTemplateEngine {
      * if a foreach command is encountered without a query argument.
      */
     function __construct($db, $tableRows = null) {
+        $db->set_charset("utf8mb4");
         $this->db = $db;
         $this->level = 0;
         $this->reserved = array("foreach", "if", "endif", "endforeach");
@@ -262,7 +263,7 @@ class XmlTemplateEngine {
             }
             else if ($child->nodeType == XML_TEXT_NODE) {
                 $paras = $this->getParagraphs($child->nodeValue);
-                if (count($paras) > 1) {  // Only process multiple paragraphs
+                if (count($paras) > 0) {  // Not sure if we can get zero back, but let's be safe
                     $child->nodeValue = array_shift($paras); // Save only the first para in the node
                     $extraParas = $paras;  // And start accumulating the rest
                 }
@@ -642,9 +643,9 @@ class XmlTemplateEngine {
     // the stuff I know about back to UTF-8.
     static function clean($s) {
         // debug(" Cleaning $s\n");
-        $s = xmlTemplateEngine::fixMicrosoft($s);
+        // $s = xmlTemplateEngine::fixMicrosoft($s);
+        $cleaned = htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8", False);
         $s = str_replace(array("\n", "\r"), array(" ", ""), trim($s));
-        $cleaned = htmlspecialchars(utf8_encode($s), ENT_QUOTES, "UTF-8", False);
 
         // Now convert a known set of HTML Entities to UTF-8, but leaving &lt; and &gt;
         // alone, as they're used for structure elements like <p> tags.
@@ -764,6 +765,7 @@ class XmlTemplateEngine {
 if ($DEBUGGING) {
     $db = mysqli_connect("localhost", 'ctcadmin', 'murgatr0ad');
     $db || die('Could not connect to database');
+    // $db->set_charset("utf8");
     $db->select_db('newsletter') || die('Could not open database');
     $filename = "newsletterTemplate.odt";
     $template = file_get_contents($filename);
