@@ -280,11 +280,7 @@ function ProcessFields($con)
 		$out[strtolower($row["name"])] = array( "value" => $value, "sql" => $sql );
         
 		if ($value != $row["value"] &&
-<<<<<<< HEAD
 			!$con->query("update newsletter.`fields`
-=======
-			!$con->query("update ctcweb9_newsletter.`fields` 
->>>>>>> master
 							set value='".addslashes($value)."' where id = $id"))
 			die($con->error);
     }
