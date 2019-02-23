@@ -51,7 +51,6 @@ class XmlTemplateEngine {
      * if a foreach command is encountered without a query argument.
      */
     function __construct($db, $tableRows = null) {
-        $db->set_charset("utf8mb4");
         $this->db = $db;
         $this->level = 0;
         $this->reserved = array("foreach", "if", "endif", "endforeach");
