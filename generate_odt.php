@@ -167,14 +167,16 @@ class XmlTemplateEngine {
         $bits = preg_split($pattern, $text, null, PREG_SPLIT_DELIM_CAPTURE);
         $outside = true;
         foreach ($bits as $bit) {
+            // Strip any remaining html tags from the bit
+            $strippedBit = strip_tags(html_entity_decode($bit));
             if ($bit != '' || count($bits) == 1) {  // Discard empty paras unless that's all there is
                 if ($outside) {
-                    $newNodes[] = $this->dom->createTextNode($bit);
+                    $newNodes[] = $this->dom->createTextNode($strippedBit);
                 }
                 else {
                     $newNode = $this->dom->createElement('text:span');
                     $newNode->setAttribute('text:style-name', $ctcName);
-                    $newNode->appendChild($this->dom->createTextNode($bit));
+                    $newNode->appendChild($this->dom->createTextNode($strippedBit));
                     $newNodes[] = $newNode;
                 }
             }
